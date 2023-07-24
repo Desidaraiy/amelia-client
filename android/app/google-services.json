@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "543705481998",
+    "firebase_url": "https://amelia-13d2b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "amelia-13d2b",
+    "storage_bucket": "amelia-13d2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543705481998:android:ee0e19b8b0858645758d5f",
+        "android_client_info": {
+          "package_name": "com.client.amelia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543705481998-mn0rqrs3htr1r9v07c6a95vgupukup01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.client.amelia",
+            "certificate_hash": "9fa0d79bd5162dfbc92472b7bd987d232823a607"
+          }
+        },
+        {
+          "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVlKw8CZzAvq2Rch2Tn8XUP5ZprcXuBGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543705481998:android:e95c766edbe7e44f758d5f",
+        "android_client_info": {
+          "package_name": "com.delivery.amelia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVlKw8CZzAvq2Rch2Tn8XUP5ZprcXuBGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543705481998:android:0dbcbae698fcdd39758d5f",
+        "android_client_info": {
+          "package_name": "com.manager.amelia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVlKw8CZzAvq2Rch2Tn8XUP5ZprcXuBGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

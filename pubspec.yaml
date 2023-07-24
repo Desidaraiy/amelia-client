@@ -1,0 +1,142 @@
+name: markets
+description: markets
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 2.0.0+9
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+module:
+  androidX: true
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.5
+  google_maps_flutter: 2.2.3
+  # google_map_location_picker: 4.1.7
+  mvc_pattern: ^8.10.1+01
+  global_configuration: ^2.0.0-nullsafety.1
+  html: ^0.15.1
+  shared_preferences: ^2.0.17
+  flutter_html: ^3.0.0-alpha.5
+  flutter_svg: ^1.0.3
+  # location: 3.0.2
+  webview_flutter: ^3.0.4
+  url_launcher: ^6.1.8
+  firebase_messaging: ^13.1.0
+  cached_network_image: ^3.2.0
+  fluttertoast: 8.0.1-nullsafety.0
+  flutter_staggered_grid_view: 0.4.0
+  intl_utils: ^2.7.0
+  carousel_slider: ^4.2.1
+  # cloud_firestore: 0.14.4
+  cloud_firestore: ^3.5.1
+  firebase_auth: ^3.4.2
+  firebase_core: ^1.24.0
+  firebase_core_platform_interface: 4.5.1
+  mask_text_input_formatter: ^2.3.0
+  easy_mask: ^2.0.1
+  # geolocator: ^6.2.1
+  geolocator: ^9.0.2
+  date_time_picker: ^2.1.0
+  percent_indicator: ^2.1.7+4
+  flutter_datetime_picker: ^1.5.1
+  sberbank_acquiring: ^2.0.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+dependency_overrides:
+  intl: 0.18.0
+  http: 0.13.5
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  generate: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/cfg/
+    - assets/img/
+    - assets/icons/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+  - family: Jost
+    fonts:
+      - asset: assets/fonts/Jost-Light.ttf
+        weight: 300
+      - asset: assets/fonts/Jost-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/Jost-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Jost-SemiBold.ttf
+        weight: 600
+  - family: Forum
+    fonts:
+      - asset: assets/fonts/Forum-Regular.ttf
+        weight: 400
+  - family: ProductSans
+    fonts:
+      - asset: assets/fonts/ProductSans-Thin.ttf
+        weight: 100
+      - asset: assets/fonts/ProductSans-Thin.ttf
+        weight: 200
+      - asset: assets/fonts/ProductSans-Light.ttf
+        weight: 300
+      - asset: assets/fonts/ProductSans-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/ProductSans-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/ProductSans-Bold.ttf
+        weight: 600
+      - asset: assets/fonts/ProductSans-Black.ttf
+        weight: 700
+      - asset: assets/fonts/ProductSans-Black.ttf
+        weight: 800
+      - asset: assets/fonts/ProductSans-Black.ttf
+        weight: 900
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: assets/fonts/TrajanPro.ttf
+  #       - asset: assets/fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-assets/fonts/#from-packages
+flutter_intl:
+  enabled: true

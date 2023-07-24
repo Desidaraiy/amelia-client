@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>543705481998-6jlkfmbucdck17r817j7dibdtgh51bs1.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.543705481998-6jlkfmbucdck17r817j7dibdtgh51bs1</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>543705481998-mn0rqrs3htr1r9v07c6a95vgupukup01.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB67WoHRu7Brnrq1Td_oA7FSQjH4nuAbcU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>543705481998</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.client.amelia</string>
+	<key>PROJECT_ID</key>
+	<string>amelia-13d2b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>amelia-13d2b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:543705481998:ios:c21302e61567c57f758d5f</string>
+	<key>DATABASE_URL</key>
+	<string>https://amelia-13d2b-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
