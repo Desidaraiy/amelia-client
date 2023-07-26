@@ -55,6 +55,10 @@ class _ShippingWidgetState extends StateMVC<ShippingWidget> {
   }
 
   void _handleStep() {
+    if (selectedIndex == 1) {
+      _deliveryPrice = '';
+      _deliveryRegion = '';
+    }
     _con.handleSecondStepInput(_address, _deliveryRegion, _deliveryPrice);
     setState(() {});
   }

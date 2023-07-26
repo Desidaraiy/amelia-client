@@ -76,9 +76,10 @@ class _CheckoutButtonsWidgetState extends StateMVC<CheckoutButtonsWidget> {
                 ),
                 Text(
                   // "${_con.total.toInt().toString()}",
-                  _con.deliveryPrice.isEmpty
+                  // _con.deliveryPrice.isEmpty
+                  _con.deliveryOrPickup == 1
                       ? "${_con.total.toInt().toString()}"
-                      : "${_con.total + int.parse(_con.deliveryPrice)}",
+                      : "${_con.total + int.parse(_con.deliveryPrice == "" ? "0" : _con.deliveryPrice)}",
                   style: Theme.of(context).textTheme.subtitle1.merge(TextStyle(
                       height: 1.2,
                       fontWeight: FontWeight.w500,

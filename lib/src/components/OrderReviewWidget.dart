@@ -143,10 +143,12 @@ class _OrderReviewWidgetState extends State<OrderReviewWidget> {
               data_1_1: "${_con.getDeliveryOrPickupString}",
               title_1_2: "Адрес:",
               data_1_2: "${_con.deliveryOrPickupAddress}",
-              title_2_1: "Район доставки",
-              data_2_1: "${_con.deliveryRegion}",
-              title_2_2: "Стоимости доставки:",
-              data_2_2: "${_con.deliveryPrice} ₽",
+              title_2_1: _con.deliveryRegion != "" ? "Район доставки" : "",
+              data_2_1:
+                  _con.deliveryRegion != "" ? "${_con.deliveryRegion}" : "",
+              title_2_2: _con.deliveryPrice != "" ? "Стоимости доставки:" : "",
+              data_2_2:
+                  _con.deliveryPrice != "" ? "${_con.deliveryPrice} ₽" : "",
               title_3_1: "",
               data_3_1: "",
             ),

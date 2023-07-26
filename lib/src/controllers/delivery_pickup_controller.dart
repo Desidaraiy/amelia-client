@@ -126,9 +126,14 @@ class DeliveryPickupController extends CartController {
   }
 
   Future<void> runJsInWebView() async {
-    double _wTotal = !getPaymentMethodCashOrCard
+    print('delivery or pickup? ${deliveryOrPickup}');
+    print('delivery price is ${deliveryPrice.toString()}');
+    print('total is ${total.toString()}');
+
+    double _wTotal = deliveryPrice != ""
         ? double.parse(deliveryPrice) + total
         : total.toDouble();
+
     String output = myPhone.replaceAll(RegExp(r'\s+|-'), '');
     await webViewController.runJavascript(''' 
       var sum = document.getElementById('sum');
@@ -171,6 +176,8 @@ class DeliveryPickupController extends CartController {
                 if (request.url.contains('success.html')) {
                   Navigator.pop(context, 2);
                 } else if (request.url.contains('error.html')) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Возникла ошибка при оплате')));
                   Navigator.pop(context, 0);
                 }
                 return NavigationDecision.navigate;

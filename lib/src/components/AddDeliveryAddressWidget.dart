@@ -23,15 +23,39 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
   TextEditingController _floorCont = TextEditingController();
   TextEditingController _apartmentCont = TextEditingController();
 
+  bool _isAddressValid = true;
+  bool _isEntranceValid = true;
+  bool _isFloorValid = true;
+  bool _isApartmentValid = true;
+
   String _fullAddress;
 
   void _handleAddress(context) {
+    _isAddressValid = true;
+    _isEntranceValid = true;
+    _isFloorValid = true;
+    _isApartmentValid = true;
+
+    if (_addressCont.text.isEmpty) {
+      _isAddressValid = false;
+    }
+    if (_entranceCont.text.isEmpty) {
+      _isEntranceValid = false;
+    }
+    if (_floorCont.text.isEmpty) {
+      _isFloorValid = false;
+    }
+    if (_apartmentCont.text.isEmpty) {
+      _isApartmentValid = false;
+    }
+    setState(() {});
     if (_addressCont.text.isEmpty ||
         _entranceCont.text.isEmpty ||
         _floorCont.text.isEmpty ||
         _apartmentCont.text.isEmpty) {
       return;
     }
+
     _fullAddress =
         "${_addressCont.text}, подъезд ${_entranceCont.text}, этаж ${_floorCont.text}, квартира ${_apartmentCont.text}";
     widget.onPop(_fullAddress);
@@ -53,6 +77,8 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
         PropertyInput(
           small: false,
           textController: _addressCont,
+          propertyInvalid: !_isAddressValid,
+          errorText: 'Заполните поле.',
           personal: false,
           onSaved: (input) {},
           onChange: (input) {},
@@ -71,6 +97,8 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
               child: PropertyInput(
                 small: false,
                 textController: _entranceCont,
+                propertyInvalid: !_isEntranceValid,
+                errorText: 'Заполните поле.',
                 personal: false,
                 onSaved: (input) {},
                 onChange: (input) {},
@@ -88,6 +116,8 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
               child: PropertyInput(
                 small: false,
                 textController: _floorCont,
+                propertyInvalid: !_isFloorValid,
+                errorText: 'Заполните поле.',
                 personal: false,
                 onSaved: (input) {},
                 onChange: (input) {},
@@ -106,6 +136,8 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
               child: PropertyInput(
                 small: false,
                 textController: _apartmentCont,
+                propertyInvalid: !_isApartmentValid,
+                errorText: 'Заполните поле.',
                 personal: false,
                 onSaved: (input) {},
                 onChange: (input) {},
