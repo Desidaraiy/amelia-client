@@ -1,23 +1,3 @@
 {
-"dart.flutterSdkPath": "C:\\flutter_sdk\\flutter_stable_2.0.4",
-"workbench.colorCustomizations": {
-    "activityBar.activeBackground": "#f74c3d",
-    "activityBar.background": "#f74c3d",
-    "activityBar.foreground": "#e7e7e7",
-    "activityBar.inactiveForeground": "#e7e7e799",
-    "activityBarBadge.background": "#0af51d",
-    "activityBarBadge.foreground": "#15202b",
-    "commandCenter.border": "#e7e7e799",
-    "sash.hoverBorder": "#f74c3d",
-    "statusBar.background": "#f51f0c",
-    "statusBar.foreground": "#e7e7e7",
-    "statusBarItem.hoverBackground": "#f74c3d",
-    "statusBarItem.remoteBackground": "#f51f0c",
-    "statusBarItem.remoteForeground": "#e7e7e7",
-    "titleBar.activeBackground": "#f51f0c",
-    "titleBar.activeForeground": "#e7e7e7",
-    "titleBar.inactiveBackground": "#f51f0c99",
-    "titleBar.inactiveForeground": "#e7e7e799"
-},
-"peacock.color": "#f51f0c"
+"dart.flutterSdkPath": "C:\\flutter_sdk\\flutter_stable_2.0.4"
 }

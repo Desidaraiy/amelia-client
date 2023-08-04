@@ -28,6 +28,8 @@ class _ShippingWidgetState extends StateMVC<ShippingWidget> {
   String _address = '';
   String _deliveryRegion = '';
   String _deliveryPrice = '';
+  String _hint = '';
+  bool _isPrivate = false;
   DeliveryPickupController _con;
 
   // @override
@@ -49,17 +51,21 @@ class _ShippingWidgetState extends StateMVC<ShippingWidget> {
       _con = widget.controller;
       selectedIndex = _con.getDeliveryOrPickup;
       _address = _con.deliveryOrPickupAddress;
+      _hint = _con.deliveryHint;
+      _isPrivate = _con.deliveryIsPrivate;
       _deliveryRegion = _con.getDeliveryRegion;
       _deliveryPrice = _con.getDeliveryPrice;
     });
   }
 
   void _handleStep() {
+    String _deliveryHint = '';
     if (selectedIndex == 1) {
       _deliveryPrice = '';
       _deliveryRegion = '';
     }
-    _con.handleSecondStepInput(_address, _deliveryRegion, _deliveryPrice);
+    _con.handleSecondStepInput(
+        _address, _deliveryRegion, _deliveryPrice, _hint, _isPrivate);
     setState(() {});
   }
 
@@ -127,7 +133,9 @@ class _ShippingWidgetState extends StateMVC<ShippingWidget> {
                                   onPop: (value) {
                                     // print('vibrannyu adres ${value}');
                                     setState(() {
-                                      _address = value;
+                                      _address = value['address'];
+                                      _hint = value['hint'];
+                                      _isPrivate = value['isPrivate'];
                                     });
                                     _handleStep();
                                   },

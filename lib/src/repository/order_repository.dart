@@ -128,6 +128,7 @@ Future<Order> addOrder(Order order, Payment payment, String myName) async {
     headers: {HttpHeaders.contentTypeHeader: 'application/json'},
     body: json.encode(params),
   );
+  print('response is ${response.body}');
   return Order.fromJSON(json.decode(response.body)['data']);
 }
 

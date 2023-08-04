@@ -10,7 +10,7 @@ import 'CheckBoxWidget.dart';
 class AddDeliveryAddressWidget extends StatefulWidget {
   const AddDeliveryAddressWidget({this.onPop});
 
-  final Function(String) onPop;
+  final Function(Map<String, dynamic>) onPop;
 
   @override
   State<AddDeliveryAddressWidget> createState() =>
@@ -22,11 +22,14 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
   TextEditingController _entranceCont = TextEditingController();
   TextEditingController _floorCont = TextEditingController();
   TextEditingController _apartmentCont = TextEditingController();
+  TextEditingController _hintCont = TextEditingController();
 
   bool _isAddressValid = true;
   bool _isEntranceValid = true;
   bool _isFloorValid = true;
   bool _isApartmentValid = true;
+
+  bool _isPrivateOrOrganization = false;
 
   String _fullAddress;
 
@@ -39,26 +42,42 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
     if (_addressCont.text.isEmpty) {
       _isAddressValid = false;
     }
-    if (_entranceCont.text.isEmpty) {
-      _isEntranceValid = false;
-    }
-    if (_floorCont.text.isEmpty) {
-      _isFloorValid = false;
-    }
-    if (_apartmentCont.text.isEmpty) {
-      _isApartmentValid = false;
-    }
-    setState(() {});
-    if (_addressCont.text.isEmpty ||
-        _entranceCont.text.isEmpty ||
-        _floorCont.text.isEmpty ||
-        _apartmentCont.text.isEmpty) {
-      return;
+
+    if (!_isPrivateOrOrganization) {
+      if (_entranceCont.text.isEmpty) {
+        _isEntranceValid = false;
+      }
+      if (_floorCont.text.isEmpty) {
+        _isFloorValid = false;
+      }
+      if (_apartmentCont.text.isEmpty) {
+        _isApartmentValid = false;
+      }
     }
 
-    _fullAddress =
-        "${_addressCont.text}, подъезд ${_entranceCont.text}, этаж ${_floorCont.text}, квартира ${_apartmentCont.text}";
-    widget.onPop(_fullAddress);
+    setState(() {});
+    if (_addressCont.text.isEmpty) {
+      return;
+    }
+    if (!_isPrivateOrOrganization) {
+      if (_entranceCont.text.isEmpty ||
+          _floorCont.text.isEmpty ||
+          _apartmentCont.text.isEmpty) {
+        return;
+      }
+    }
+
+    _fullAddress = !_isPrivateOrOrganization
+        ? "${_addressCont.text}, подъезд ${_entranceCont.text}, этаж ${_floorCont.text}, квартира ${_apartmentCont.text}"
+        : "${_addressCont.text}";
+
+    Map<String, dynamic> addressData = {
+      'address': _fullAddress,
+      'hint': _hintCont.text,
+      'isPrivate': _isPrivateOrOrganization,
+    };
+
+    widget.onPop(addressData);
     Navigator.of(context).pop();
   }
 
@@ -155,7 +174,7 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
         ),
         PropertyInput(
           small: false,
-          textController: TextEditingController(),
+          textController: _hintCont,
           personal: false,
           onSaved: (input) {},
           onChange: (input) {},
@@ -166,8 +185,12 @@ class _AddDeliveryAddressWidgetState extends State<AddDeliveryAddressWidget> {
           labelText: "Комментарий курьеру (необязательно)",
         ),
         CheckBoxWidget(
-          value: false,
-          onChange: (value) {},
+          value: _isPrivateOrOrganization,
+          onChange: (value) {
+            setState(() {
+              _isPrivateOrOrganization = value;
+            });
+          },
           checkboxTextFirst: Text(
             "Частный дом, организация и т.п",
             style: Theme.of(context)

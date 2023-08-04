@@ -36,6 +36,7 @@ class _PersonalDataFormWidgetState extends StateMVC<PersonalDataFormWidget> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       _con = widget.controller;
       _myNameController.text = _con.myName;
@@ -63,204 +64,226 @@ class _PersonalDataFormWidgetState extends StateMVC<PersonalDataFormWidget> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  Row(
+                  _con.deliveryOrPickup == 0
+                      ? Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  S.of(context).sender_data,
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                                SizedBox(
+                                  width: 1,
+                                ),
+                                Text(
+                                  "*",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      .merge(
+                                          TextStyle(color: expanded_red_450)),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            PropertyInput(
+                              textController: _myNameController,
+                              personal: false,
+                              small: false,
+                              propertyInvalid: !_con.isMyNameCorrect,
+                              errorText: 'Введите фамилию и имя',
+                              onSaved: (input) {},
+                              onChange: (input) {
+                                _con.isMyNameCorrect = true;
+                                _handleInput(
+                                    _myNameController.text,
+                                    _myPhoneController.text,
+                                    _receiverNameController.text,
+                                    _receiverPhoneController.text,
+                                    _receiverLetterController.text);
+                              },
+                              hintText: 'Имя и фамилия',
+                              maxLines: 1,
+                              maxLength: 100,
+                              keyboardType: TextInputType.text,
+                              labelText: "Имя и фамилия",
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            PropertyInput(
+                                textController: _myPhoneController,
+                                personal: false,
+                                small: false,
+                                propertyInvalid: !_con.isMyPhoneCorrect,
+                                errorText: 'Введите корректный номер телефона',
+                                onSaved: (input) {},
+                                onChange: (input) {
+                                  _handleInput(
+                                      _myNameController.text,
+                                      _myPhoneController.text,
+                                      _receiverNameController.text,
+                                      _receiverPhoneController.text,
+                                      _receiverLetterController.text);
+                                },
+                                hintText: '999 999-99-99',
+                                maxLines: 1,
+                                maxLength: 100,
+                                inputFormatters: [
+                                  TextInputMask(mask: '\999 999-99-99')
+                                ],
+                                keyboardType: TextInputType.number,
+                                prefixIcon: Container(
+                                  width: 48,
+                                  height: 48,
+                                  padding: EdgeInsets.only(top: 4),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    S.of(context).country_code,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4
+                                        .merge(TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: primary_700)),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 16,
+                            ),
+                          ],
+                        )
+                      : Container(height: 0),
+                  Column(
                     children: [
-                      Text(
-                        S.of(context).sender_data,
-                        style: Theme.of(context).textTheme.subtitle1,
+                      Row(
+                        children: [
+                          Text(
+                            S.of(context).recipient_data,
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Text(
+                            "*",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                .merge(TextStyle(color: expanded_red_450)),
+                          )
+                        ],
+                      ),
+                      _con.deliveryOrPickup == 0
+                          ? CheckBoxWidget(
+                              value: _isReceiverFieldsEqualsToMine,
+                              onChange: (value) {
+                                setState(() {
+                                  _isReceiverFieldsEqualsToMine = value;
+                                  _con.handleFirstStepCheckBox(value);
+                                  _con.isReceiverNameCorrect = true;
+                                  _con.isReceiverPhoneCorrect = true;
+                                });
+                              },
+                              checkboxTextFirst: Text(
+                                "Совпадают с данными отправителя",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .overline
+                                    .merge(TextStyle(
+                                        color: neutral_500, height: 1.1)),
+                              ),
+                            )
+                          : Container(height: 0),
+                      PropertyInput(
+                        disabled: _isReceiverFieldsEqualsToMine,
+                        textController: _receiverNameController,
+                        personal: false,
+                        small: false,
+                        propertyInvalid: !_con.isReceiverNameCorrect,
+                        errorText: 'Введите фамилию и имя',
+                        onSaved: (input) {},
+                        onChange: (input) {
+                          _handleInput(
+                              _myNameController.text,
+                              _myPhoneController.text,
+                              _receiverNameController.text,
+                              _receiverPhoneController.text,
+                              _receiverLetterController.text);
+                        },
+                        hintText: 'Имя и фамилия',
+                        maxLines: 1,
+                        maxLength: 100,
+                        keyboardType: TextInputType.text,
+                        labelText: "Имя и фамилия",
                       ),
                       SizedBox(
-                        width: 1,
+                        height: 8,
                       ),
-                      Text(
-                        "*",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .merge(TextStyle(color: expanded_red_450)),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  PropertyInput(
-                    textController: _myNameController,
-                    personal: false,
-                    small: false,
-                    propertyInvalid: !_con.isMyNameCorrect,
-                    errorText: 'Введите фамилию и имя',
-                    onSaved: (input) {},
-                    onChange: (input) {
-                      _con.isMyNameCorrect = true;
-                      _handleInput(
-                          _myNameController.text,
-                          _myPhoneController.text,
-                          _receiverNameController.text,
-                          _receiverPhoneController.text,
-                          _receiverLetterController.text);
-                    },
-                    hintText: 'Имя и фамилия',
-                    maxLines: 1,
-                    maxLength: 100,
-                    keyboardType: TextInputType.text,
-                    labelText: "Имя и фамилия",
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  PropertyInput(
-                      textController: _myPhoneController,
-                      personal: false,
-                      small: false,
-                      propertyInvalid: !_con.isMyPhoneCorrect,
-                      errorText: 'Введите корректный номер телефона',
-                      onSaved: (input) {},
-                      onChange: (input) {
-                        _handleInput(
-                            _myNameController.text,
-                            _myPhoneController.text,
-                            _receiverNameController.text,
-                            _receiverPhoneController.text,
-                            _receiverLetterController.text);
-                      },
-                      hintText: '999 999-99-99',
-                      maxLines: 1,
-                      maxLength: 100,
-                      inputFormatters: [TextInputMask(mask: '\999 999-99-99')],
-                      keyboardType: TextInputType.number,
-                      prefixIcon: Container(
-                        width: 48,
-                        height: 48,
-                        padding: EdgeInsets.only(top: 4),
-                        alignment: Alignment.center,
-                        child: Text(
-                          S.of(context).country_code,
-                          style: Theme.of(context).textTheme.headline4.merge(
-                              TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: primary_700)),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        S.of(context).recipient_data,
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
+                      PropertyInput(
+                          textController: _receiverPhoneController,
+                          disabled: _isReceiverFieldsEqualsToMine,
+                          personal: false,
+                          small: false,
+                          propertyInvalid: !_con.isReceiverPhoneCorrect,
+                          errorText: 'Введите корректный номер телефона',
+                          onSaved: (input) {},
+                          onChange: (input) {
+                            _handleInput(
+                                _myNameController.text,
+                                _myPhoneController.text,
+                                _receiverNameController.text,
+                                _receiverPhoneController.text,
+                                _receiverLetterController.text);
+                          },
+                          hintText: '999 999-99-99',
+                          maxLines: 1,
+                          maxLength: 100,
+                          inputFormatters: [
+                            TextInputMask(mask: '\999 999-99-99')
+                          ],
+                          keyboardType: TextInputType.number,
+                          prefixIcon: Container(
+                            width: 48,
+                            height: 48,
+                            padding: EdgeInsets.only(top: 4),
+                            alignment: Alignment.center,
+                            child: Text(
+                              S.of(context).country_code,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  .merge(TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: primary_700)),
+                            ),
+                          )),
                       SizedBox(
-                        width: 1,
+                        height: 8,
                       ),
-                      Text(
-                        "*",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .merge(TextStyle(color: expanded_red_450)),
-                      )
+                      PropertyInput(
+                        textController: _receiverLetterController,
+                        personal: false,
+                        small: false,
+                        onSaved: (input) {},
+                        onChange: (input) {
+                          _handleInput(
+                              _myNameController.text,
+                              _myPhoneController.text,
+                              _receiverNameController.text,
+                              _receiverPhoneController.text,
+                              _receiverLetterController.text);
+                        },
+                        hintText: 'Текст записки (необязательно)',
+                        maxLines: 1,
+                        maxLength: 100,
+                        keyboardType: TextInputType.text,
+                        labelText: "Текст записки (необязательно)",
+                      ),
                     ],
-                  ),
-                  CheckBoxWidget(
-                    value: _isReceiverFieldsEqualsToMine,
-                    onChange: (value) {
-                      setState(() {
-                        _isReceiverFieldsEqualsToMine = value;
-                        _con.handleFirstStepCheckBox(value);
-                        _con.isReceiverNameCorrect = true;
-                        _con.isReceiverPhoneCorrect = true;
-                      });
-                    },
-                    checkboxTextFirst: Text(
-                      "Совпадают с данными отправителя",
-                      style: Theme.of(context)
-                          .textTheme
-                          .overline
-                          .merge(TextStyle(color: neutral_500, height: 1.1)),
-                    ),
-                  ),
-                  PropertyInput(
-                    disabled: _isReceiverFieldsEqualsToMine,
-                    textController: _receiverNameController,
-                    personal: false,
-                    small: false,
-                    propertyInvalid: !_con.isReceiverNameCorrect,
-                    errorText: 'Введите фамилию и имя',
-                    onSaved: (input) {},
-                    onChange: (input) {
-                      _handleInput(
-                          _myNameController.text,
-                          _myPhoneController.text,
-                          _receiverNameController.text,
-                          _receiverPhoneController.text,
-                          _receiverLetterController.text);
-                    },
-                    hintText: 'Имя и фамилия',
-                    maxLines: 1,
-                    maxLength: 100,
-                    keyboardType: TextInputType.text,
-                    labelText: "Имя и фамилия",
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  PropertyInput(
-                      textController: _receiverPhoneController,
-                      disabled: _isReceiverFieldsEqualsToMine,
-                      personal: false,
-                      small: false,
-                      propertyInvalid: !_con.isReceiverPhoneCorrect,
-                      errorText: 'Введите корректный номер телефона',
-                      onSaved: (input) {},
-                      onChange: (input) {
-                        _handleInput(
-                            _myNameController.text,
-                            _myPhoneController.text,
-                            _receiverNameController.text,
-                            _receiverPhoneController.text,
-                            _receiverLetterController.text);
-                      },
-                      hintText: '999 999-99-99',
-                      maxLines: 1,
-                      maxLength: 100,
-                      inputFormatters: [TextInputMask(mask: '\999 999-99-99')],
-                      keyboardType: TextInputType.number,
-                      prefixIcon: Container(
-                        width: 48,
-                        height: 48,
-                        padding: EdgeInsets.only(top: 4),
-                        alignment: Alignment.center,
-                        child: Text(
-                          S.of(context).country_code,
-                          style: Theme.of(context).textTheme.headline4.merge(
-                              TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: primary_700)),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  PropertyInput(
-                    textController: _receiverLetterController,
-                    personal: false,
-                    small: false,
-                    onSaved: (input) {},
-                    onChange: (input) {
-                      _handleInput(
-                          _myNameController.text,
-                          _myPhoneController.text,
-                          _receiverNameController.text,
-                          _receiverPhoneController.text,
-                          _receiverLetterController.text);
-                    },
-                    hintText: 'Текст записки (необязательно)',
-                    maxLines: 1,
-                    maxLength: 100,
-                    keyboardType: TextInputType.text,
-                    labelText: "Текст записки (необязательно)",
                   ),
                   widget.userOrder
                       ? Column(

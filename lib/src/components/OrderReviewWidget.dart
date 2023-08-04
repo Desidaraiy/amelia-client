@@ -149,8 +149,8 @@ class _OrderReviewWidgetState extends State<OrderReviewWidget> {
               title_2_2: _con.deliveryPrice != "" ? "Стоимости доставки:" : "",
               data_2_2:
                   _con.deliveryPrice != "" ? "${_con.deliveryPrice} ₽" : "",
-              title_3_1: "",
-              data_3_1: "",
+              title_3_1: _con.deliveryHint != "" ? "Подсказка водителю:" : '',
+              data_3_1: "${_con.deliveryHint.toString()}",
             ),
             SizedBox(
               height: 8,

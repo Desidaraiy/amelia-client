@@ -235,13 +235,9 @@ class CartController extends ControllerMVC {
       //     },
       //   ),
       // ));
-
-      //! завод табов опций доставки
-      // 0 - самовывоз, 1 - день, 2 - ночь
-      //!
-
+      List<dynamic> _initiator = [deliveryOption, carts[0].product.market.id];
       Navigator.of(state.context)
-          .pushNamed('/DeliveryPickup', arguments: deliveryOption);
+          .pushNamed('/DeliveryPickup', arguments: _initiator);
     } else {
       if (carts[0].product.market.closed) {
         ScaffoldMessenger.of(scaffoldKey?.currentContext).showSnackBar(SnackBar(

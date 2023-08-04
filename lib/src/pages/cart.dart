@@ -133,7 +133,8 @@ class _CartWidgetState extends StateMVC<CartWidget> {
                               ),
                               Expanded(
                                 child: Text(
-                                  S.of(context).tap_to_create_bouquet,
+                                  // S.of(context).tap_to_create_bouquet,
+                                  "Нажмите на изображение товара, чтобы выбрать цветы для создания букета. (используйте эту функцию если вы выбрали цветы из раздела «цветы в ассортименте»)",
                                   style: Theme.of(context).textTheme.bodyText2,
                                 ),
                               )

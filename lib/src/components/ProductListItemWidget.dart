@@ -98,6 +98,7 @@ class _ProductListItemWidgetState extends StateMVC<ProductListItemWidget> {
               children: [
                 Container(
                     width: 116,
+                    // height: widget.image_height * 1.5 + 116,
                     height: 116,
                     child: Stack(
                       fit: StackFit.loose,

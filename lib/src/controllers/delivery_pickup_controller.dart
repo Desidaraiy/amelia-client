@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:markets/src/models/cart.dart';
 // import '../models/address.dart';
 import 'package:markets/src/models/order.dart';
 import 'package:sberbank_acquiring/sberbank_acquiring_ui.dart';
@@ -11,6 +12,7 @@ import '../models/address.dart' as model;
 import '../models/payment_method.dart';
 import '../repository/settings_repository.dart' as settingRepo;
 import '../repository/user_repository.dart' as userRepo;
+import '../repository/market_repository.dart' as marketRepo;
 import 'cart_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +21,6 @@ class DeliveryPickupController extends CartController {
 
   PaymentMethodList list;
   WebViewController webViewController;
-
   // завод заказов
 
   Order order;
@@ -29,10 +30,16 @@ class DeliveryPickupController extends CartController {
   }
 
   // шаг 0, выбираем опцию доставки, которая будет определять цену и метод доставки
+  List<dynamic> schedules = [];
   int cartDeliveryOption = 0;
-  void initDeliveryPickupFromCart(option) {
-    deliveryOrPickup = option == 1 ? 0 : 1;
-    print('option is $option');
+  void initDeliveryPickupFromCart(option) async {
+    deliveryOrPickup = option[0] == 1 ? 0 : 1;
+    setState(() {});
+    await getDeliveryTimeSchedules(option[1]);
+  }
+
+  Future<void> getDeliveryTimeSchedules(marketId) async {
+    schedules = await marketRepo.getSchedulesOfMarket(marketId);
     setState(() {});
   }
 
@@ -73,6 +80,8 @@ class DeliveryPickupController extends CartController {
   String get getDeliveryPrice => deliveryPrice;
   bool deliveryRegionCorrect = true;
   bool deliveryOrPickupAddressCorrect = true;
+  String deliveryHint = "";
+  bool deliveryIsPrivate = false;
 
   // третий шаг
   String deliveryDate = '';
@@ -90,6 +99,7 @@ class DeliveryPickupController extends CartController {
 
   String get getDeliveryTime {
     if (deliveryTime.isEmpty) return '';
+    if (deliveryTime.split(' - ').length == 2) return deliveryTime;
     List<String> _temp = deliveryTime.split(':');
     int _tempInt = int.parse(_temp[0]);
     String _tempString;
@@ -219,11 +229,12 @@ class DeliveryPickupController extends CartController {
   void handleThirdStepDate(date) {
     deliveryDate = date;
     deliveryDateCorrect = true;
-    setState(() {});
+    // setState(() {});
   }
 
   void handleThirdStepTime(time, nightbool) {
     deliveryTime = time;
+    if (deliveryPrice == '') return;
     if (nightbool && !multiplied) {
       deliveryPrice = (int.parse(deliveryPrice) * 2).toString();
       multiplied = true;
@@ -273,7 +284,7 @@ class DeliveryPickupController extends CartController {
     setState(() {});
   }
 
-  void handleSecondStepInput(address, region, price) {
+  void handleSecondStepInput(address, region, price, hint, isPrivate) {
     deliveryOrPickupAddress = address;
     deliveryRegion = region;
     deliveryPrice = price;
@@ -281,6 +292,8 @@ class DeliveryPickupController extends CartController {
     deliveryTime = '';
     deliveryRegionCorrect = true;
     deliveryOrPickupAddressCorrect = true;
+    deliveryHint = hint;
+    deliveryIsPrivate = isPrivate;
     setState(() {});
   }
 
@@ -293,8 +306,10 @@ class DeliveryPickupController extends CartController {
     isMyNameCorrect = myName.isNotEmpty;
     isMyPhoneCorrect = myPhone.length >= 9;
 
-    if (!isMyNameCorrect || !isMyPhoneCorrect) {
-      _ret = false;
+    if (deliveryOrPickup == 0) {
+      if (!isMyNameCorrect || !isMyPhoneCorrect) {
+        _ret = false;
+      }
     }
 
     if (!isReceiverFieldsEqualsToMine) {

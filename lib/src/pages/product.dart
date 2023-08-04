@@ -176,7 +176,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                         SliverAppBar(
                           automaticallyImplyLeading: false,
                           backgroundColor: background,
-                          expandedHeight: 220,
+                          expandedHeight: 280,
                           elevation: 0,
                           iconTheme: IconThemeData(
                               color: Theme.of(context).primaryColor),
@@ -189,7 +189,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                   options: CarouselOptions(
                                     autoPlay: true,
                                     autoPlayInterval: Duration(seconds: 7),
-                                    height: 220,
+                                    height: 280,
                                     viewportFraction: 1.0,
                                     onPageChanged: (index, reason) {
                                       setState(() {
@@ -201,7 +201,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                     return Builder(
                                       builder: (BuildContext context) {
                                         return CachedNetworkImage(
-                                          height: 220,
+                                          height: 280,
                                           width: double.infinity,
                                           fit: BoxFit.cover,
                                           imageUrl: image.url,
@@ -210,7 +210,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                             'assets/img/loading.gif',
                                             fit: BoxFit.cover,
                                             width: double.infinity,
-                                            height: 300,
+                                            height: 280,
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Icon(Icons.error_outline),

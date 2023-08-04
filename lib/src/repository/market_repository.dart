@@ -201,3 +201,14 @@ Future<Review> addMarketReview(Review review, Market market) async {
     return Review.fromJSON({});
   }
 }
+
+Future<List<dynamic>> getSchedulesOfMarket(marketId) async {
+  final String url =
+      '${GlobalConfiguration().getValue('api_base_url')}markets/$marketId/schedules';
+  final client = new http.Client();
+  final response = await client.get(Uri.parse(url),
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'});
+  Map<String, dynamic> jsonResponse = json.decode(response.body);
+  String today = DateTime.now().toIso8601String().substring(0, 10);
+  return jsonResponse['data'][today];
+}

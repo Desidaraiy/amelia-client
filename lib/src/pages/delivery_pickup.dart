@@ -90,7 +90,7 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
     order.receiver_name = _con.getReceiverName;
     order.receiver_phone = _con.getReceiverPhone;
     order.sms_after_delivery = _con.receiverLetter;
-    order.hint = 'default';
+    order.hint = _con.deliveryHint;
     order.comment = 'default';
     order.delivery_timestamp = _con.getDeliveryTimestamp;
     OrderStatus orderStatus = new OrderStatus();
@@ -132,7 +132,6 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
   @override
   void initState() {
     _scrollController = ScrollController();
-    print('delivery option is ${widget.routeArgument.param}');
     _con.initDeliveryPickupFromCart(widget.routeArgument.param);
     super.initState();
   }

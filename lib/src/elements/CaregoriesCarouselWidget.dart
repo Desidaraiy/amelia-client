@@ -55,7 +55,10 @@ class CategoriesCarouselWidget extends StatelessWidget {
                     free: false,
                     title: this.categories[index].name,
                     categoryPhoto:
-                        Image(image: AssetImage('assets/icons/product.png')),
+                        // Image(image: AssetImage('assets/icons/product.png')),
+                        Image(
+                            image:
+                                NetworkImage(this.categories[index].image.url)),
                     category: this.categories[index],
                   ),
                 );

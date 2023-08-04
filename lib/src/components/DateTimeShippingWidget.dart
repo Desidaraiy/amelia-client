@@ -19,9 +19,9 @@ class DateTimeShippingWidget extends StatefulWidget {
 
 class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
   DeliveryPickupController _con;
-  int selectedIndex = -1;
-  // int selectedIndexDay = 0;
-  // int selectedIndexNight = 0;
+  int selectedIndex = 0;
+  int selectedIndexDay = 0;
+  int selectedIndexNight = 0;
   DateTime date;
   TimeOfDay time;
   DateTime now = DateTime.now();
@@ -29,23 +29,29 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
   DateTime _tomorrowDate;
   DateTime _dayAfterTomorrowDate;
   bool nightDelivery = false;
-  // List<String> scheduleDay = [
-  //   "13:00-14:00, 0₽",
-  //   "14:00-15:00, 0₽",
-  //   "15:00-16:00, 0₽",
-  //   "16:00-17:00, 0₽",
-  //   "17:00-18:00, 0₽",
-  //   "18:00-19:00, 0₽",
-  //   "19:00-20:00, 0₽"
-  // ];
-  // List<String> scheduleNight = [
-  //   "23:00-00:00, 500₽",
-  //   "00:00-01:00, 500₽",
-  //   "01:00-02:00, 500₽"
-  // ];
+  bool isToday = false;
+  List<dynamic> schList = [];
+  List<String> scheduleDay = [
+    // "13:00-14:00",
+    // "14:00-15:00",
+    // "15:00-16:00",
+    // "16:00-17:00",
+    // "17:00-18:00",
+    // "18:00-19:00",
+    // "19:00-20:00"
+  ];
+
+  // List<String> scheduleDay = [];
+
+  List<String> scheduleNight = ["23:00-00:00", "00:00-01:00", "01:00-02:00"];
 
   bool isNightTime(DateTime dateTime) {
     final int hour = dateTime.hour;
+    return hour >= 22 || hour < 6;
+  }
+
+  bool isNightTimeString(String time) {
+    final int hour = int.parse(time.split(":")[0]);
     return hour >= 22 || hour < 6;
   }
 
@@ -69,6 +75,7 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
 
   void _handleDateFromCalendar() {
     setState(() {
+      isToday = calculateDifference(date) == 0 ? true : false;
       selectedIndex = 3;
     });
     String _date = DateFormat('dd.MM.yyyy').format(date);
@@ -79,12 +86,12 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
     _con.handleThirdStepTime(time, isNight);
   }
 
-  // String getStartTimeByIndex(int index, List<String> array) {
-  //   String timeRange = array[index];
-  //   List<String> timeParts = timeRange.split('-');
-  //   String startTime = timeParts[0].trim();
-  //   return startTime;
-  // }
+  String getStartTimeByIndex(int index, List<String> array) {
+    String timeRange = array[index];
+    List<String> timeParts = timeRange.split('-');
+    String startTime = timeParts[0].trim();
+    return startTime;
+  }
 
   // int findIndexByTime(List<String> array, String time) {
   //   for (int i = 0; i < array.length; i++) {
@@ -97,23 +104,15 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
   //   return -1;
   // }
 
-  // void _handleTimeShortCuts(int type) {
-  //   List<String> array;
-  //   int index;
-  //   if (type == 0) {
-  //     // day
-  //     array = scheduleDay;
-  //     index = selectedIndexDay;
-  //     selectedIndexNight = -1;
-  //   } else {
-  //     // night
-  //     array = scheduleNight;
-  //     index = selectedIndexNight;
-  //     selectedIndexDay = -1;
-  //   }
-  //   String _time = getStartTimeByIndex(index, array);
-  //   _con.handleThirdStepTime(_time);
-  // }
+  void _handleTimeShortCuts() {
+    List<String> array;
+    int index;
+    array = scheduleDay;
+    index = selectedIndexDay;
+    selectedIndexNight = -1;
+    String _time = getStartTimeByIndex(index, array);
+    _con.handleThirdStepTime(array[index], isNightTimeString(_time));
+  }
 
   // void _initTimeOfDelivery() {
   //   setState(() {
@@ -161,6 +160,12 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
           selectedIndex = 3;
           date = _dateToDateTime;
         }
+      } else {
+        String _date = DateFormat('dd.MM.yyyy').format(now);
+        _con.handleThirdStepDate(_date);
+        setState(() {
+          isToday = true;
+        });
       }
     });
   }
@@ -172,6 +177,20 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
         .inDays;
   }
 
+  void generateSchedules() {
+    List<String> _schedulesAvailable = [];
+    for (var schedule in schList) {
+      DateTime start = DateTime.parse(schedule['s']);
+      DateTime end = DateTime.parse(schedule['e']);
+      String timeRange =
+          "${DateFormat.Hm().format(start)} - ${DateFormat.Hm().format(end)}";
+      _schedulesAvailable.add(timeRange);
+    }
+    setState(() {
+      scheduleDay = _schedulesAvailable;
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -180,6 +199,8 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
       _dayAfterTomorrowDate = now.add(Duration(days: 2));
       _displayInCalendar = now;
       _con = widget.controller;
+      schList = _con.schedules;
+      generateSchedules();
       _initTimeOfDelivery();
       _initDateOfDelivery();
     });
@@ -210,71 +231,72 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
                   SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    S.of(context).choose_day,
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                        color: _con.deliveryDateCorrect
-                            ? primary_700
-                            : semantic_error),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  SizedBox(
-                    height: 32,
-                    child: ListView.builder(
-                      itemCount: days.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, int index) {
-                        return Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                });
-                                _handleDateShortCuts();
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                    border: selectedIndex == index
-                                        ? Border.all(color: secondary_300)
-                                        : Border.all(style: BorderStyle.none),
-                                    color: selectedIndex == index
-                                        ? secondary_100
-                                        : primary_50,
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12, right: 12),
-                                  child: Text(days[index],
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .caption
-                                          .merge(TextStyle(
-                                              height: 1.1,
-                                              color: selectedIndex == index
-                                                  ? secondary_300
-                                                  : neutral_350))),
-                                ),
-                              ),
-                            ),
-                            index != days.length - 1
-                                ? SizedBox(
-                                    width: 8,
-                                  )
-                                : SizedBox(),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+                  // Text(
+                  //   S.of(context).choose_day,
+                  //   style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  //       color: _con.deliveryDateCorrect
+                  //           ? primary_700
+                  //           : semantic_error),
+                  // ),
+                  // SizedBox(
+                  //   height: 8,
+                  // ),
+                  // SizedBox(
+                  //   height: 32,
+                  //   child: ListView.builder(
+                  //     itemCount: days.length,
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemBuilder: (context, int index) {
+                  //       return Row(
+                  //         children: [
+                  //           InkWell(
+                  //             onTap: () {
+                  //               setState(() {
+                  //                 selectedIndex = index;
+                  //               });
+                  //               _handleDateShortCuts();
+                  //             },
+                  //             child: Container(
+                  //               alignment: Alignment.center,
+                  //               height: 32,
+                  //               decoration: BoxDecoration(
+                  //                   border: selectedIndex == index
+                  //                       ? Border.all(color: secondary_300)
+                  //                       : Border.all(style: BorderStyle.none),
+                  //                   color: selectedIndex == index
+                  //                       ? secondary_100
+                  //                       : primary_50,
+                  //                   borderRadius: BorderRadius.circular(5.0)),
+                  //               child: Padding(
+                  //                 padding: EdgeInsets.only(left: 12, right: 12),
+                  //                 child: Text(days[index],
+                  //                     style: Theme.of(context)
+                  //                         .textTheme
+                  //                         .caption
+                  //                         .merge(TextStyle(
+                  //                             height: 1.1,
+                  //                             color: selectedIndex == index
+                  //                                 ? secondary_300
+                  //                                 : neutral_350))),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           index != days.length - 1
+                  //               ? SizedBox(
+                  //                   width: 8,
+                  //                 )
+                  //               : SizedBox(),
+                  //         ],
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 16,
                   ),
                   Text(
-                    S.of(context).or_use_calendar,
+                    // S.of(context).or_use_calendar,
+                    "Используйте календарь",
                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                         color: _con.deliveryDateCorrect
                             ? primary_700
@@ -511,39 +533,36 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
                   //         .merge(TextStyle(color: semantic_error)),
                   //   ),
                   // ),
-                  DeliveryTimeWidget(
-                    onPress: () async {
-                      DatePicker.showTimePicker(context,
-                          showTitleActions: true,
-                          showSecondsColumn: false,
-                          theme: DatePickerTheme(
-                              doneStyle: TextStyle(
-                                  color: secondary_300, fontSize: 18.0)),
-                          locale: LocaleType.ru, onConfirm: (date) {
-                        String _hour =
-                            date.hour < 10 ? '0${date.hour}' : '${date.hour}';
-                        String _minute = date.minute < 10
-                            ? '0${date.minute}'
-                            : '${date.minute}';
-                        String _time = "$_hour:$_minute";
-                        bool isNight = isNightTime(date);
-                        setState(() {
-                          nightDelivery = isNight;
-                          time = TimeOfDay.fromDateTime(date);
-                          _handleTimeeFromPicker(_time, isNight);
-                        });
-                      }, currentTime: date);
-
-                      // if 'Cancel' => null
-                      // if (newDate == null) return;
-
-                      // setState(() {
-                      //   date = newDate;
-                      //   _handleDateFromCalendar();
-                      // });
-                    },
-                    time: time,
-                  ),
+                  !isToday
+                      ? DeliveryTimeWidget(
+                          onPress: () async {
+                            DatePicker.showTimePicker(context,
+                                showTitleActions: true,
+                                showSecondsColumn: false,
+                                theme: DatePickerTheme(
+                                    doneStyle: TextStyle(
+                                        color: secondary_300, fontSize: 18.0)),
+                                locale: LocaleType.ru, onConfirm: (date) {
+                              String _hour = date.hour < 10
+                                  ? '0${date.hour}'
+                                  : '${date.hour}';
+                              String _minute = date.minute < 10
+                                  ? '0${date.minute}'
+                                  : '${date.minute}';
+                              String _time = "$_hour:$_minute";
+                              bool isNight = isNightTime(date);
+                              setState(() {
+                                nightDelivery = isNight;
+                                time = TimeOfDay.fromDateTime(date);
+                                _handleTimeeFromPicker(_time, isNight);
+                              });
+                            }, currentTime: date);
+                          },
+                          time: time,
+                        )
+                      : Container(
+                          height: 0,
+                        ),
                 ],
               ),
             ),
@@ -557,66 +576,68 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
                     ),
                   )
                 : Container(),
-            // SizedBox(
-            //   height: 32,
-            //   child: ListView.builder(
-            //     itemCount: scheduleDay.length,
-            //     scrollDirection: Axis.horizontal,
-            //     itemBuilder: (context, int index) {
-            //       return Row(
-            //         children: [
-            //           index == 0
-            //               ? SizedBox(
-            //                   width: 16,
-            //                 )
-            //               : SizedBox(),
-            //           InkWell(
-            //             onTap: () {
-            //               setState(() {
-            //                 selectedIndexDay = index;
-            //                 _handleTimeShortCuts(0);
-            //               });
-            //             },
-            //             child: Container(
-            //               alignment: Alignment.center,
-            //               height: 32,
-            //               decoration: BoxDecoration(
-            //                   border: selectedIndexDay == index
-            //                       ? Border.all(color: secondary_300)
-            //                       : Border.all(style: BorderStyle.none),
-            //                   color: selectedIndexDay == index
-            //                       ? secondary_100
-            //                       : primary_50,
-            //                   borderRadius: BorderRadius.circular(5.0)),
-            //               child: Padding(
-            //                 padding: EdgeInsets.only(left: 12, right: 12),
-            //                 child: Text(scheduleDay[index],
-            //                     style: Theme.of(context)
-            //                         .textTheme
-            //                         .caption
-            //                         .merge(TextStyle(
-            //                             height: 1.25,
-            //                             color: selectedIndexDay == index
-            //                                 ? secondary_300
-            //                                 : neutral_350))),
-            //               ),
-            //             ),
-            //           ),
-            //           index != scheduleDay.length - 1
-            //               ? SizedBox(
-            //                   width: 8,
-            //                 )
-            //               : SizedBox(),
-            //           index == scheduleDay.length - 1
-            //               ? SizedBox(
-            //                   width: 16,
-            //                 )
-            //               : SizedBox(),
-            //         ],
-            //       );
-            //     },
-            //   ),
-            // ),
+            isToday
+                ? SizedBox(
+                    height: 32,
+                    child: ListView.builder(
+                      itemCount: scheduleDay.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, int index) {
+                        return Row(
+                          children: [
+                            index == 0
+                                ? SizedBox(
+                                    width: 16,
+                                  )
+                                : SizedBox(),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndexDay = index;
+                                  _handleTimeShortCuts();
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                    border: selectedIndexDay == index
+                                        ? Border.all(color: secondary_300)
+                                        : Border.all(style: BorderStyle.none),
+                                    color: selectedIndexDay == index
+                                        ? secondary_100
+                                        : primary_50,
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 12, right: 12),
+                                  child: Text(scheduleDay[index],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .merge(TextStyle(
+                                              height: 1.25,
+                                              color: selectedIndexDay == index
+                                                  ? secondary_300
+                                                  : neutral_350))),
+                                ),
+                              ),
+                            ),
+                            index != scheduleDay.length - 1
+                                ? SizedBox(
+                                    width: 8,
+                                  )
+                                : SizedBox(),
+                            index == scheduleDay.length - 1
+                                ? SizedBox(
+                                    width: 16,
+                                  )
+                                : SizedBox(),
+                          ],
+                        );
+                      },
+                    ),
+                  )
+                : Container(height: 0),
             // Padding(
             //   padding: EdgeInsets.symmetric(horizontal: 16),
             //   child: Column(
@@ -655,7 +676,7 @@ class _DateTimeShippingWidgetState extends State<DateTimeShippingWidget> {
             //             onTap: () {
             //               setState(() {
             //                 selectedIndexNight = index;
-            //                 _handleTimeShortCuts(1);
+            //                 // _handleTimeShortCuts(1);
             //               });
             //             },
             //             child: Container(
