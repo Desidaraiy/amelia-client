@@ -9,6 +9,7 @@ class ProductSet extends StatelessWidget {
       {Key key,
       this.setName,
       this.imgName,
+      this.imgUrl = '',
       this.favorite,
       this.width,
       this.height,
@@ -21,6 +22,7 @@ class ProductSet extends StatelessWidget {
       : super(key: key);
   final String setName;
   final String imgName;
+  final String imgUrl;
   final Widget favorite;
   final double width;
   final double height;
@@ -57,8 +59,11 @@ class ProductSet extends StatelessWidget {
                                 Radius.circular(5.0),
                               ),
                               image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/img/' + imgName + '.jpg'),
+                                image: imgUrl.isEmpty
+                                    ? AssetImage(
+                                        'assets/img/' + imgName + '.jpg')
+                                    : NetworkImage(
+                                        'https://amelia-app53.fvds.ru/$imgUrl'),
                                 fit: BoxFit.cover,
                               ),
                             )))),

@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:markets/src/models/Product.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../generated/l10n.dart';
 import '../helpers/helper.dart';
 import '../models/cart.dart';
 import '../models/coupon.dart';
+import '../models/present.dart';
 import '../repository/cart_repository.dart';
 import '../repository/coupon_repository.dart';
 import '../repository/settings_repository.dart';
@@ -15,6 +17,12 @@ import '../repository/product_repository.dart' as prodRepo;
 
 class CartController extends ControllerMVC {
   List<Cart> carts = <Cart>[];
+  List<CartPresentModel> presents = <CartPresentModel>[];
+  bool presentsLoading = false;
+  List<Product> related = <Product>[];
+  bool relatedLoading = false;
+  bool cartsLoading = false;
+  bool get getCartsLoading => cartsLoading;
   double taxAmount = 0.0;
   double deliveryFee = 0.0;
   int cartCount = 0;
@@ -43,6 +51,22 @@ class CartController extends ControllerMVC {
   }
 
   List<Cart> get getSelectedForBouquet => selectedForBouquet;
+
+  Future<void> getPresents() async {
+    presentsLoading = true;
+    setState(() {});
+    presents = await prodRepo.getPresents();
+    presentsLoading = false;
+    setState(() {});
+  }
+
+  Future<void> getRelated() async {
+    relatedLoading = true;
+    setState(() {});
+    related = await prodRepo.getRelated();
+    relatedLoading = false;
+    setState(() {});
+  }
 
   void addToSelectedForBouquet(Cart item) {
     selectedForBouquet.add(item);
@@ -81,6 +105,8 @@ class CartController extends ControllerMVC {
 
   void listenForCarts({String message}) async {
     carts.clear();
+    cartsLoading = true;
+    setState(() {});
     final Stream<Cart> stream = await getCart();
     stream.listen((Cart _cart) {
       if (!carts.contains(_cart)) {
@@ -103,7 +129,9 @@ class CartController extends ControllerMVC {
           content: Text(message),
         ));
       }
+      cartsLoading = false;
       onLoadingCartDone();
+      setState(() {});
     });
   }
 

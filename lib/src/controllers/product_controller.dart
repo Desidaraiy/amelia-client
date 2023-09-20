@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:markets/src/models/present.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../generated/l10n.dart';
@@ -9,11 +10,14 @@ import '../models/Product.dart';
 import '../repository/cart_repository.dart';
 import '../repository/product_repository.dart';
 import '../repository/user_repository.dart';
+import '../repository/product_repository.dart' as prodRepo;
 
 class ProductController extends ControllerMVC {
   Product product;
   double quantity = 1;
   double total = 0;
+  List<CartPresentModel> presents = <CartPresentModel>[];
+  bool presentsLoading = false;
   List<Cart> carts = [];
   Favorite favorite;
   bool favoriteBool;
@@ -24,6 +28,14 @@ class ProductController extends ControllerMVC {
   ProductController() {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
     // listenForCart();
+  }
+
+  Future<void> getPresents() async {
+    presentsLoading = true;
+    setState(() {});
+    presents = await prodRepo.getPresents();
+    presentsLoading = false;
+    setState(() {});
   }
 
   void listenForProduct({String productId, String message}) async {

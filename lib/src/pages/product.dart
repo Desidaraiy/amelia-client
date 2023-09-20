@@ -12,6 +12,7 @@ import 'package:markets/src/components/ProductReviewWidget.dart';
 
 import 'package:markets/src/components/SetWidget.dart';
 import 'package:markets/src/controllers/cart_controller.dart';
+import 'package:markets/src/elements/CartPresent.dart';
 import 'package:markets/src/elements/ShoppingCartButtonWidget.dart';
 import 'package:markets/src/helpers/colors.dart';
 import 'package:markets/src/models/Product.dart';
@@ -77,6 +78,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
     _con.listenForProduct(productId: widget.routeArgument.id);
     _con.listenForCart();
     _con.listenForFavorite(productId: widget.routeArgument.id);
+    _con.getPresents();
     super.initState();
     setState(() {
       selectedIndex = 0;
@@ -254,39 +256,39 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                       const EdgeInsets.fromLTRB(16, 0, 16, 0),
                                   child: Column(
                                     children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ProductTagWidget(
-                                            text: "-10%",
-                                            tagColor: expanded_red_550,
-                                            topPadding: 4,
-                                            bottomPadding: 4,
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          ProductTagWidget(
-                                            text: "К 1 сентября",
-                                            tagColor: accent_200,
-                                            topPadding: 3,
-                                            bottomPadding: 5,
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          ProductTagWidget(
-                                            text: "новинка",
-                                            tagColor: expanded_green_dimmed_400,
-                                            topPadding: 3,
-                                            bottomPadding: 5,
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 12,
-                                      ),
+                                      // Row(
+                                      //   crossAxisAlignment:
+                                      //       CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     ProductTagWidget(
+                                      //       text: "-10%",
+                                      //       tagColor: expanded_red_550,
+                                      //       topPadding: 4,
+                                      //       bottomPadding: 4,
+                                      //     ),
+                                      //     SizedBox(
+                                      //       width: 8,
+                                      //     ),
+                                      //     ProductTagWidget(
+                                      //       text: "К 1 сентября",
+                                      //       tagColor: accent_200,
+                                      //       topPadding: 3,
+                                      //       bottomPadding: 5,
+                                      //     ),
+                                      //     SizedBox(
+                                      //       width: 8,
+                                      //     ),
+                                      //     ProductTagWidget(
+                                      //       text: "новинка",
+                                      //       tagColor: expanded_green_dimmed_400,
+                                      //       topPadding: 3,
+                                      //       bottomPadding: 5,
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 12,
+                                      // ),
                                       Row(
                                         children: [
                                           ProductTagWidget(
@@ -659,78 +661,64 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                 //   ),
                                 // ),
 
+                                // Padding(
+                                //   padding:
+                                //       const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                //   child: Divider(
+                                //     color: expanded_light_neutral_100,
+                                //     height: 1.5,
+                                //   ),
+                                // ),
+
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  child: Divider(
-                                    color: expanded_light_neutral_100,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'В подарок вы получите',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      SizedBox(
-                                        height: 116,
-                                        child: ListView(
-                                          scrollDirection: Axis.horizontal,
+                                  child: (_con.presentsLoading == false &&
+                                          _con.presents.isNotEmpty)
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Column(
-                                              children: [
-                                                ProductSet(
-                                                  icon: false,
-                                                  imgName: 'set',
-                                                  setName: 'Открытка',
-                                                  small: true,
-                                                ),
-                                              ],
+                                            Divider(
+                                              color: expanded_light_neutral_100,
+                                              height: 1.5,
                                             ),
                                             SizedBox(
-                                              width: 8,
+                                              height: 20,
                                             ),
-                                            Column(
-                                              children: [
-                                                ProductSet(
-                                                  icon: false,
-                                                  imgName: 'set',
-                                                  setName:
-                                                      'Инструкция по уходу',
-                                                  small: true,
-                                                ),
-                                              ],
+                                            Text(
+                                              'В подарок вы получите',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1,
                                             ),
                                             SizedBox(
-                                              width: 8,
+                                              height: 8,
                                             ),
-                                            Column(
-                                              children: [
-                                                ProductSet(
-                                                  icon: false,
-                                                  imgName: 'set',
-                                                  setName:
-                                                      'Средство для подкормки',
-                                                  small: true,
-                                                ),
-                                              ],
-                                            ),
+                                            !_con.presentsLoading
+                                                ? SizedBox(
+                                                    height: 134,
+                                                    child: ListView.builder(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount: _con
+                                                            .presents.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return CartPresent(
+                                                              present:
+                                                                  _con.presents[
+                                                                      index]);
+                                                        }),
+                                                  )
+                                                : SizedBox(
+                                                    height: 134,
+                                                    child: Center(
+                                                        child:
+                                                            CircularProgressIndicator())),
                                           ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                        )
+                                      : SizedBox(height: 0),
                                 ),
                                 Padding(
                                   padding:

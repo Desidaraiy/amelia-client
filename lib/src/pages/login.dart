@@ -1,12 +1,11 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:markets/src/components/PrimaryButtonWidget.dart';
+import 'package:markets/src/components/PrimaryButtonWithLoader.dart';
 import 'package:markets/src/components/TextInputWidget.dart';
 import 'package:markets/src/components/CheckBoxWidget.dart';
 import 'package:markets/src/helpers/colors.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
 import '../../generated/l10n.dart';
 import '../controllers/user_controller.dart';
 import '../elements/BlockButtonWidget.dart';
@@ -27,7 +26,7 @@ class _LoginWidgetState extends StateMVC<LoginWidget> {
   }
 
   TextEditingController txCont = new TextEditingController();
-
+  bool tapped = false;
   bool userDataChecked = false;
 
   @override
@@ -123,7 +122,6 @@ class _LoginWidgetState extends StateMVC<LoginWidget> {
                           });
                         },
                         checkboxTextFirst: InkWell(
-                          ///открывается страница с этим
                           onTap: () {},
                           child: RichText(
                             text: TextSpan(
@@ -161,13 +159,17 @@ class _LoginWidgetState extends StateMVC<LoginWidget> {
                       SizedBox(
                         height: 8,
                       ),
-                      PrimaryButton(
+                      PrimaryButtonLoader(
                         icon: null,
                         small: false,
                         text: "Отправить код",
                         enabled: userDataChecked,
+                        isLoading: tapped,
                         onPressed: () {
                           if (userDataChecked) {
+                            setState(() {
+                              tapped = true;
+                            });
                             String phone =
                                 txCont.text.replaceAll(RegExp(r'[-\s]'), '');
                             _con.verifyPhone('+7${phone}');

@@ -28,9 +28,21 @@ class UserController extends ControllerMVC {
 
     _firebaseMessaging.getToken().then((String _deviceToken) {
       user.deviceToken = _deviceToken;
+      print('Device Token: $_deviceToken');
     }).catchError((e) {
       print('Notification not configured');
     });
+  }
+
+  Future<String> getDeviceToken() async {
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    try {
+      String deviceToken = await _firebaseMessaging.getToken();
+      return deviceToken;
+    } catch (e) {
+      print('Notification not configured');
+      return null;
+    }
   }
 
   void login() async {
@@ -100,6 +112,7 @@ class UserController extends ControllerMVC {
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
       repository.currentUser.value.verificationId = verId;
     };
+
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResent]) {
       repository.currentUser.value.verificationId = verId;
       Navigator.push(
@@ -107,11 +120,13 @@ class UserController extends ControllerMVC {
         MaterialPageRoute(
             builder: (context) => OTPConfirmationWidget(
                   phone: phone,
-                  onVerified: (val) {
+                  onVerified: (val) async {
                     repository.currentUser.value.phone = phone;
                     if (repository.currentUser.value.name == null) {
                       repository.currentUser.value.name = 'Клиент';
                     }
+                    repository.currentUser.value.deviceToken =
+                        await getDeviceToken();
                     repository
                         .register(repository.currentUser.value)
                         .then((value) => {

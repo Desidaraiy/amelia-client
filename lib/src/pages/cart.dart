@@ -5,9 +5,11 @@ import 'package:markets/src/components/AlertDialogWidget.dart';
 import 'package:markets/src/components/CartItemWidget.dart';
 import 'package:markets/src/components/CategoryWidget.dart';
 import 'package:markets/src/components/DeleteLabelWidget.dart';
+import 'package:markets/src/components/ProductListWidget.dart';
 import 'package:markets/src/components/SetWidget.dart';
 import 'package:markets/src/components/TextInputWidget.dart';
 import 'package:markets/src/components/CreateBouquetBottomSheetWidget.dart';
+import 'package:markets/src/elements/CartPresent.dart';
 import 'package:markets/src/helpers/colors.dart';
 import 'package:markets/src/models/cart.dart';
 import 'package:markets/src/models/Product.dart';
@@ -78,6 +80,8 @@ class _CartWidgetState extends StateMVC<CartWidget> {
   @override
   void initState() {
     _con.listenForCarts();
+    _con.getPresents();
+    _con.getRelated();
     _bouquetList = _con.selectedForBouquet;
     super.initState();
   }
@@ -118,7 +122,7 @@ class _CartWidgetState extends StateMVC<CartWidget> {
                     horizontal: 16,
                   ),
                   child: _con.carts.isEmpty
-                      ? EmptyCartWidget()
+                      ? EmptyCartWidget(controller: _con)
                       : Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,142 +376,210 @@ class _CartWidgetState extends StateMVC<CartWidget> {
                             // SizedBox(
                             //   height: 20,
                             // ),
-                            Divider(
-                              color: expanded_light_neutral_100,
-                              height: 1.5,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'В подарок вы получите',
-                              style: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            SizedBox(
-                              height: 134,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Column(
+
+                            (_con.presentsLoading == false &&
+                                    _con.presents.isNotEmpty)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      ProductSet(
-                                        icon: false,
-                                        imgName: 'set',
-                                        setName: 'Открытка',
-                                        small: true,
+                                      Divider(
+                                        color: expanded_light_neutral_100,
+                                        height: 1.5,
                                       ),
                                       SizedBox(
-                                        height: 2,
+                                        height: 20,
                                       ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "0",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          ),
-                                          SizedBox(
-                                            width: 1,
-                                          ),
-                                          Text(
-                                            '₽',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .overline
-                                                .merge(TextStyle(
-                                                    color: primary_700)),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Column(
-                                    children: [
-                                      ProductSet(
-                                        icon: false,
-                                        imgName: 'set',
-                                        setName: 'Инструкция по уходу',
-                                        small: true,
+                                      Text(
+                                        'В подарок вы получите',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1,
                                       ),
                                       SizedBox(
-                                        height: 2,
+                                        height: 8,
                                       ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "0",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          ),
-                                          SizedBox(
-                                            width: 1,
-                                          ),
-                                          Text(
-                                            '₽',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .overline
-                                                .merge(TextStyle(
-                                                    color: primary_700)),
-                                          ),
-                                        ],
-                                      ),
+                                      !_con.presentsLoading
+                                          ? SizedBox(
+                                              height: 134,
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      _con.presents.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return CartPresent(
+                                                        present: _con
+                                                            .presents[index]);
+                                                  }),
+                                            )
+                                          : SizedBox(
+                                              height: 134,
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator())),
                                     ],
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Column(
+                                  )
+                                : SizedBox(height: 0),
+                            (_con.relatedLoading == false &&
+                                    _con.related.isNotEmpty)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      ProductSet(
-                                        icon: false,
-                                        imgName: 'set',
-                                        setName: 'Средство для подкормки',
-                                        small: true,
+                                      Divider(
+                                        color: expanded_light_neutral_100,
+                                        height: 1.5,
                                       ),
                                       SizedBox(
-                                        height: 2,
+                                        height: 20,
                                       ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "0",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          ),
-                                          SizedBox(
-                                            width: 1,
-                                          ),
-                                          Text(
-                                            '₽',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .overline
-                                                .merge(TextStyle(
-                                                    color: primary_700)),
-                                          ),
-                                        ],
+                                      Text(
+                                        'Вам может понадобиться',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1,
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      ProductListWidget(
+                                        productsList: _con.related,
+                                        heroTag: 'home_product_carousel',
+                                        inCart: true,
+                                        addedCallback: () async {
+                                          await Future.delayed(
+                                              Duration(milliseconds: 700));
+                                          _con.listenForCarts();
+                                          setState(() {});
+                                        },
                                       ),
                                     ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  )
+                                : SizedBox(height: 0),
+                            // SizedBox(
+                            //   height: 134,
+                            //   child: ListView(
+                            //     scrollDirection: Axis.horizontal,
+                            //     children: [
+                            //       Column(
+                            //         children: [
+                            //           ProductSet(
+                            //             icon: false,
+                            //             imgName: 'set',
+                            //             setName: 'Открытка',
+                            //             small: true,
+                            //           ),
+                            //           SizedBox(
+                            //             height: 2,
+                            //           ),
+                            //           Row(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.end,
+                            //             children: [
+                            //               Text(
+                            //                 "0",
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .bodyText1,
+                            //               ),
+                            //               SizedBox(
+                            //                 width: 1,
+                            //               ),
+                            //               Text(
+                            //                 '₽',
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .overline
+                            //                     .merge(TextStyle(
+                            //                         color: primary_700)),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       SizedBox(
+                            //         width: 8,
+                            //       ),
+                            //       Column(
+                            //         children: [
+                            //           ProductSet(
+                            //             icon: false,
+                            //             imgName: 'set',
+                            //             setName: 'Инструкция по уходу',
+                            //             small: true,
+                            //           ),
+                            //           SizedBox(
+                            //             height: 2,
+                            //           ),
+                            //           Row(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.end,
+                            //             children: [
+                            //               Text(
+                            //                 "0",
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .bodyText1,
+                            //               ),
+                            //               SizedBox(
+                            //                 width: 1,
+                            //               ),
+                            //               Text(
+                            //                 '₽',
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .overline
+                            //                     .merge(TextStyle(
+                            //                         color: primary_700)),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       SizedBox(
+                            //         width: 8,
+                            //       ),
+                            //       Column(
+                            //         children: [
+                            //           ProductSet(
+                            //             icon: false,
+                            //             imgName: 'set',
+                            //             setName: 'Средство для подкормки',
+                            //             small: true,
+                            //           ),
+                            //           SizedBox(
+                            //             height: 2,
+                            //           ),
+                            //           Row(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.end,
+                            //             children: [
+                            //               Text(
+                            //                 "0",
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .bodyText1,
+                            //               ),
+                            //               SizedBox(
+                            //                 width: 1,
+                            //               ),
+                            //               Text(
+                            //                 '₽',
+                            //                 style: Theme.of(context)
+                            //                     .textTheme
+                            //                     .overline
+                            //                     .merge(TextStyle(
+                            //                         color: primary_700)),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             SizedBox(
                               height: 20,
                             ),

@@ -124,27 +124,27 @@ class _PlacedOrderWidgetState extends StateMVC<PlacedOrderWidget> {
                 // SizedBox(
                 //   height: 16,
                 // ),
-                InkWell(
-                  onTap: () => showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialogWidget(
-                            title: "Отменить заказ?",
-                            onYes: "Отменить",
-                          )),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 13,
-                    ),
-                    child: Text(
-                      "Отменить заказ",
-                      style:
-                          Theme.of(context).textTheme.subtitle1.merge(TextStyle(
-                                color: semantic_error,
-                              )),
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () => showDialog(
+                //       context: context,
+                //       builder: (BuildContext context) => AlertDialogWidget(
+                //             title: "Отменить заказ?",
+                //             onYes: "Отменить",
+                //           )),
+                //   child: Padding(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: 10,
+                //       vertical: 13,
+                //     ),
+                //     child: Text(
+                //       "Отменить заказ",
+                //       style:
+                //           Theme.of(context).textTheme.subtitle1.merge(TextStyle(
+                //                 color: semantic_error,
+                //               )),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: 24,
                 ),

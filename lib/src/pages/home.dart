@@ -463,7 +463,6 @@ class _HomeWidgetState extends StateMVC<HomeWidget> {
                       return CategoriesCarouselWidget(
                         categories: _con.categories,
                       );
-
                     case 'popular_heading':
                       return Padding(
                         padding: const EdgeInsets.only(
@@ -550,7 +549,7 @@ class _HomeWidgetState extends StateMVC<HomeWidget> {
                       );
                     case 'products_sets':
                       return ProductListWidget(
-                          productsList: _con.trendingProducts,
+                          productsList: _con.productSets,
                           heroTag: 'home_product_carousel');
                     default:
                       return SizedBox(height: 0);

@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import '../../generated/l10n.dart';
 import '../repository/user_repository.dart';
+import 'package:telephony/telephony.dart';
 
 class OTPConfirmationWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -27,6 +28,8 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
   String phone;
   List<FocusNode> _focusNodes;
   List<TextEditingController> _textControllers;
+  Telephony telephony = Telephony.instance;
+  String _autofilledCode = '';
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
     super.didChangeDependencies();
     phone = widget.phone;
     _focusNodes[0].requestFocus();
+    telephony.listenIncomingSms(onNewMessage: codeAutoFill);
   }
 
   @override
@@ -47,6 +51,21 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
     _focusNodes.forEach((node) => node.dispose());
     _textControllers.forEach((controller) => controller.dispose());
     super.dispose();
+  }
+
+  void codeAutoFill(SmsMessage smsMessage) {
+    setState(() {
+      _autofilledCode =
+          smsMessage.body.replaceAll(new RegExp(r'[^0-9]'), '').substring(0, 6);
+      ;
+    });
+    print('code: $_autofilledCode');
+    if (_autofilledCode.length == 6) {
+      for (int i = 0; i < 6; i++) {
+        _textControllers[i].text = _autofilledCode[i];
+      }
+      _verify(_autofilledCode);
+    }
   }
 
   void _handleCodeChanged(int index, String value) {
@@ -64,11 +83,6 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
 
   void _verify(code) async {
     User user = FirebaseAuth.instance.currentUser;
-
-    // if (user != null) {
-    //   print('not null');
-    //   widget.onVerified;
-    // } else {
 
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
@@ -92,11 +106,6 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
     }
   }
 
-  // UserController _con;
-
-  // _OTPConfirmationWidgetState() : super(UserController()) {
-  //   _con = controller;
-  // }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -167,155 +176,27 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
                               ),
                             ),
                           ),
-                          // children: [
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   width: 8,
-                          // ),
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   width: 8,
-                          // ),
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   width: 8,
-                          // ),
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   width: 8,
-                          // ),
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   width: 8,
-                          // ),
-                          // Expanded(
-                          //   child: SmallPropertyInput(
-                          //     onSaved: (input) {},
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-
-                          // ConstrainedBox(
-                          //   constraints: BoxConstraints(minWidth: 36, minHeight: 44),
-                          //   child: PropertyInput(
-                          //     onSaved: (input) {
-                          //     },
-                          //     maxLines: 1,
-                          //     maxLength: 1,
-                          //     keyboardType: TextInputType.number,
-                          //   ),
-                          // ),
-                          // SizedBox(width: 8,),
-                          // ConstrainedBox(
-                          //   constraints: BoxConstraints(minWidth: 36, minHeight: 44),
-                          //   child: IntrinsicWidth(
-                          //     child: PropertyInput(
-                          //       onSaved: (input) {
-                          //       },
-                          //       maxLines: 1,
-                          //       maxLength: 1,
-                          //       keyboardType: TextInputType.number,
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(width: 8,),
-                          // ConstrainedBox(
-                          //   constraints: BoxConstraints(minWidth: 36,minHeight: 44),
-                          //    child: IntrinsicWidth(
-                          //      child: PropertyInput(
-                          //       onSaved: (input) {
-                          //       },
-                          //       maxLines: 1,
-                          //       maxLength: 1,
-                          //       keyboardType: TextInputType.number,
-                          // ),
-                          //    ),
-                          //  ),
-                          // SizedBox(width: 8,),
-                          // ConstrainedBox(
-                          //   constraints: BoxConstraints(minWidth: 36, maxHeight: 44),
-                          //   child: IntrinsicWidth(
-                          //     child: PropertyInput(
-                          //       onSaved: (input) {
-                          //       },
-                          //       maxLines: 1,
-                          //       maxLength: 1,
-                          //       keyboardType: TextInputType.number,
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(width: 8,),
-                          // ConstrainedBox(
-                          //   constraints: BoxConstraints(minWidth: 36),
-                          //   child: IntrinsicWidth(
-                          //     child: PropertyInput(
-                          //       onSaved: (input) {
-                          //       },
-                          //       maxLines: 1,
-                          //       maxLength: 1,
-                          //       keyboardType: TextInputType.number,
-                          //     ),
-                          //   ),
-                          // ),
-                          // ],
                         ),
                         SizedBox(
                           height: 8,
                         ),
-                        PrimaryButton(
-                          icon: null,
-                          small: false,
-                          text: "Подтвердить",
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/Pages', arguments: 0);
-                          },
-                          min_width: 176,
-                          min_height: 48,
-                          left_padding: 0,
-                          right_padding: 0,
-                          top_padding: 14,
-                          bottom_padding: 14,
-                          border_radius: 5,
-                          buttonText: true,
-                        )
+                        // PrimaryButton(
+                        //   icon: null,
+                        //   small: false,
+                        //   text: "Подтвердить",
+                        //   onPressed: () {
+                        //     Navigator.of(context)
+                        //         .pushReplacementNamed('/Pages', arguments: 0);
+                        //   },
+                        //   min_width: 176,
+                        //   min_height: 48,
+                        //   left_padding: 0,
+                        //   right_padding: 0,
+                        //   top_padding: 14,
+                        //   bottom_padding: 14,
+                        //   border_radius: 5,
+                        //   buttonText: true,
+                        // )
                       ],
                     ),
                   )

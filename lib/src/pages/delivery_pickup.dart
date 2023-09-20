@@ -78,6 +78,7 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
   TimeOfDay time;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _tapped = false;
 
   _DeliveryPickupWidgetState() : super(DeliveryPickupController()) {
     _con = controller;
@@ -117,6 +118,9 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
     } else {
       status = 1;
     }
+    setState(() {
+      _tapped = false;
+    });
     if (status != null && status != 0) {
       _checkoutCon
           .addOrder(_con.carts, order, payment, _con.myName)
@@ -193,6 +197,7 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
       bottomNavigationBar: CheckoutButtonsWidget(
         cartController: _con,
         status: "",
+        isLoading: _tapped,
         next: currentPage == 4
             ? !_con.getPaymentMethodCashOrCard
                 ? 'Готово'
@@ -239,7 +244,14 @@ class _DeliveryPickupWidgetState extends StateMVC<DeliveryPickupWidget> {
           }
 
           if (currentPage == 4) {
-            _handleOrder(context);
+            if (_tapped) {
+              return;
+            } else {
+              _handleOrder(context);
+            }
+            setState(() {
+              _tapped = true;
+            });
           }
           // if (currentPage == 3) {
           //   showModalBottomSheet(

@@ -13,6 +13,7 @@ class CheckoutButtonsWidget extends StatefulWidget {
       this.onTapBack,
       this.back,
       this.cartController,
+      this.isLoading,
       this.status})
       : super(key: key);
   final Function() onTapNext;
@@ -20,6 +21,7 @@ class CheckoutButtonsWidget extends StatefulWidget {
   final String next;
   final String back;
   final String status;
+  final bool isLoading;
   final DeliveryPickupController cartController;
   @override
   _CheckoutButtonsWidgetState createState() => _CheckoutButtonsWidgetState();
@@ -142,12 +144,20 @@ class _CheckoutButtonsWidgetState extends StateMVC<CheckoutButtonsWidget> {
                       color: secondary_300,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                        child: Text(widget.next,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .button
-                                .merge(TextStyle(height: 1.2))),
+                        child: !widget.isLoading
+                            ? Text(widget.next,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button
+                                    .merge(TextStyle(height: 1.2)))
+                            : Center(
+                                child: Container(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                    color: Colors.white),
+                              )),
                       ),
                     ),
                   ),

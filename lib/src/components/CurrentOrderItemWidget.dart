@@ -39,8 +39,7 @@ class CurrentOrderItemWidget extends StatelessWidget {
         width: 316,
         height: delivery ? 148 : 128,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7.0),
-            color: ready ? expanded_green_50 : accent_50),
+            borderRadius: BorderRadius.circular(7.0), color: expanded_green_50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -69,26 +68,24 @@ class CurrentOrderItemWidget extends StatelessWidget {
                       SizedBox(
                         width: 4,
                       ),
-                      ready
-                          ? Row(
-                              children: [
-                                Text(
-                                  "// ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .merge(TextStyle(height: 1.1)),
-                                ),
-                                Text(
-                                  status,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .merge(TextStyle(height: 1.2)),
-                                )
-                              ],
-                            )
-                          : SizedBox(),
+                      Row(
+                        children: [
+                          Text(
+                            "// ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .merge(TextStyle(height: 1.1)),
+                          ),
+                          Text(
+                            status,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .merge(TextStyle(height: 1.2)),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),

@@ -11,8 +11,15 @@ import 'ProductListItemWidget.dart';
 
 class ProductListWidget extends StatefulWidget {
   final List<Product> productsList;
+  final VoidCallback addedCallback;
   final String heroTag;
-  ProductListWidget({Key key, this.heroTag, this.productsList})
+  final bool inCart;
+  ProductListWidget(
+      {Key key,
+      this.heroTag,
+      this.productsList,
+      this.addedCallback,
+      this.inCart = false})
       : super(key: key);
 
   @override
@@ -29,13 +36,19 @@ class _ProductListWidgetState extends StateMVC<ProductListWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 230,
+        height: 280,
         padding: EdgeInsets.symmetric(vertical: 10),
         child: ListView.builder(
           itemCount: widget.productsList.length,
           itemBuilder: (context, index) {
             return Container(
-                margin: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 20),
+                margin: EdgeInsets.only(
+                    left: index == 0
+                        ? !widget.inCart
+                            ? 20
+                            : 0
+                        : 0,
+                    right: 20),
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).pushNamed('/Product',
@@ -48,7 +61,7 @@ class _ProductListWidgetState extends StateMVC<ProductListWidget> {
                     image_height: 100,
                     info_height: 105,
                     info_width: 188,
-                    product_name: widget.productsList[index].name,
+                    product_name: '${widget.productsList[index].name}',
                     product_category:
                         widget.productsList[index].category.name ??
                             widget.productsList[index].catname,
@@ -72,7 +85,11 @@ class _ProductListWidgetState extends StateMVC<ProductListWidget> {
                     },
                     handleCart: (p) {
                       // print('adding to cart id ${p.id}');
+
                       _con.addToCart(p);
+                      if (widget.addedCallback != null) {
+                        widget.addedCallback();
+                      }
                     },
                   ),
                 ));

@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "543705481998-00l7vi2fg3catoq87v7cmc5j3nuoj201.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.client.amelia",
+            "certificate_hash": "5ec5d145b2bf3c4fa82dbb9efba454b3cf06e5e3"
+          }
+        },
+        {
           "client_id": "543705481998-mn0rqrs3htr1r9v07c6a95vgupukup01.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.client.amelia",
             "certificate_hash": "9fa0d79bd5162dfbc92472b7bd987d232823a607"
+          }
+        },
+        {
+          "client_id": "543705481998-v90e7mmflipp567p3684fonhmbn4udg7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.client.amelia",
+            "certificate_hash": "e6f9f4cee8aa7a60111de95aaafe12ff49b4ca3f"
           }
         },
         {
@@ -38,6 +54,13 @@
             {
               "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "543705481998-6jlkfmbucdck17r817j7dibdtgh51bs1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.client.amelia"
+              }
             }
           ]
         }
@@ -52,6 +75,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "543705481998-ru0ksi0qgrjkjjkk2tjgt5c9m4v1gmm6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.delivery.amelia",
+            "certificate_hash": "e6f9f4cee8aa7a60111de95aaafe12ff49b4ca3f"
+          }
+        },
+        {
           "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -67,6 +98,13 @@
             {
               "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "543705481998-6jlkfmbucdck17r817j7dibdtgh51bs1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.client.amelia"
+              }
             }
           ]
         }
@@ -81,6 +119,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "543705481998-vpgukmmiiltle259o559q95stq3g6u7k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manager.amelia",
+            "certificate_hash": "78653edefdcf8742f8710a7bbe1a325fdbd221ce"
+          }
+        },
+        {
           "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -96,6 +142,13 @@
             {
               "client_id": "543705481998-iuudkn8mr3hskh3llgmu00pm8ra89ing.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "543705481998-6jlkfmbucdck17r817j7dibdtgh51bs1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.client.amelia"
+              }
             }
           ]
         }

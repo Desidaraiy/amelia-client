@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:markets/src/models/cart.dart';
 // import '../models/address.dart';
 import 'package:markets/src/models/order.dart';
-import 'package:sberbank_acquiring/sberbank_acquiring_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../generated/l10n.dart';
@@ -136,14 +135,9 @@ class DeliveryPickupController extends CartController {
   }
 
   Future<void> runJsInWebView() async {
-    print('delivery or pickup? ${deliveryOrPickup}');
-    print('delivery price is ${deliveryPrice.toString()}');
-    print('total is ${total.toString()}');
-
     double _wTotal = deliveryPrice != ""
         ? double.parse(deliveryPrice) + total
         : total.toDouble();
-
     String output = myPhone.replaceAll(RegExp(r'\s+|-'), '');
     await webViewController.runJavascript(''' 
       var sum = document.getElementById('sum');
@@ -157,6 +151,10 @@ class DeliveryPickupController extends CartController {
       var cName = document.getElementById('clientid');
       if(cName){
         cName.value = '${myName}';
+      }
+      var paymentMethods = document.querySelectorAll('.c-btn.is-secondary');
+      if(paymentMethods.length > 0){
+        paymentMethods[0].style.display = 'none';
       }
     ''');
   }

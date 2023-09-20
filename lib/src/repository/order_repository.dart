@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:global_configuration/global_configuration.dart';
@@ -21,6 +22,10 @@ Future<Stream<Order>> getOrders() async {
   final String _apiToken = 'api_token=${_user.apiToken}&';
   final String url =
       '${GlobalConfiguration().getValue('api_base_url')}orders?${_apiToken}with=user;productOrders;productOrders.product;productOrders.options;orderStatus;payment&search=user.id:${_user.id}&searchFields=user.id:=&orderBy=id&sortedBy=desc';
+  log('user ID : ${_user.id}');
+  log('url : $url');
+  log('api token : ${_user.apiToken}');
+
   try {
     final client = new http.Client();
     final streamedRest = await client.send(http.Request('get', Uri.parse(url)));

@@ -38,6 +38,11 @@ class SplashScreenController extends ControllerMVC {
     // });
     // firebaseMessaging.requestNotificationPermissions(
     //     const IosNotificationSettings(sound: true, badge: true, alert: true));
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      print('ok firebase messaging');
+    });
     configureFirebase(firebaseMessaging);
     settingRepo.setting.addListener(() {
       if (settingRepo.setting.value.appName != null &&
@@ -77,9 +82,10 @@ class SplashScreenController extends ControllerMVC {
       //   onResume: notificationOnResume,
       // );
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        notificationOnMessage(message as Map<String, dynamic>);
+        notificationOnMessage(message);
       });
     } catch (e) {
+      print('error configuring firebase messaging');
       print(CustomTrace(StackTrace.current, message: e));
       print(CustomTrace(StackTrace.current, message: 'Error Config Firebase'));
     }
@@ -111,9 +117,9 @@ class SplashScreenController extends ControllerMVC {
     }
   }
 
-  Future notificationOnMessage(Map<String, dynamic> message) async {
+  Future notificationOnMessage(RemoteMessage message) async {
     Fluttertoast.showToast(
-      msg: message['notification']['title'],
+      msg: message.notification.title,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 5,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:markets/src/components/AlertDialogWidget.dart';
 import 'package:markets/src/components/DeleteLabelWidget.dart';
 import 'package:markets/src/helpers/colors.dart';
@@ -44,6 +45,15 @@ class _NotificationsWidgetState extends StateMVC<NotificationsWidget> {
         backgroundColor: primary_50,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: SvgPicture.asset(
+            'assets/icons/navigate_before_200.svg',
+            color: primary_700,
+          ),
+        ),
         title: Text(
           S.of(context).notifications,
           style: Theme.of(context).textTheme.headline2,

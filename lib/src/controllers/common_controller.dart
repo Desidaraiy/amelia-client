@@ -36,6 +36,7 @@ class CommonController extends ControllerMVC {
   List<Product> recentlySearchedProducts = <Product>[];
   List<Product> popularSearchedProducts = <Product>[];
   List<Product> foundProductsByQuery = <Product>[];
+  List<Product> productSets = <Product>[];
 
   // Future<void> main() async{
   //   await listenForTopMarkets();
@@ -59,6 +60,7 @@ class CommonController extends ControllerMVC {
     listenForRecentReviews();
     listenForNewInStockProducts();
     listenForPopularSearchedProducts();
+    listenForProductSets();
   }
 
   void reInitCon() {
@@ -74,6 +76,7 @@ class CommonController extends ControllerMVC {
     listenForNewInStockProducts();
     // listenForRecentlySearchedProducts();
     listenForPopularSearchedProducts();
+    listenForProductSets();
   }
 
   // !завод поиска
@@ -180,6 +183,15 @@ class CommonController extends ControllerMVC {
     final Stream<Product> stream = await getTrendingProducts();
     stream.listen((Product _product) {
       setState(() => trendingProducts.add(_product));
+    }, onError: (a) {
+      print(a);
+    }, onDone: () {});
+  }
+
+  Future<void> listenForProductSets() async {
+    final Stream<Product> stream = await getSetsOfProducts();
+    stream.listen((Product _product) {
+      setState(() => productSets.add(_product));
     }, onError: (a) {
       print(a);
     }, onDone: () {});

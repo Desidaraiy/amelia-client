@@ -154,7 +154,7 @@ class _ProductBottomDetailsWidgetState
             width: 12,
           ),
           PrimaryButton(
-            icon: null,
+            // icon: null,
             small: false,
             text: "В корзину",
             onPressed: () {

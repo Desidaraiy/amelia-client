@@ -68,15 +68,15 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           SizedBox(
-                            height: 4,
+                            height: 10,
                           ),
-                          Text(
-                            S.of(context).wait_for_delivery,
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
+                          // Text(
+                          //   S.of(context).wait_for_delivery,
+                          //   style: Theme.of(context).textTheme.bodyText2,
+                          // ),
+                          // SizedBox(
+                          //   height: 8,
+                          // ),
                         ],
                       ),
                     ),
@@ -146,87 +146,87 @@ class _OrdersWidgetState extends StateMVC<OrdersWidget> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            S.of(context).wait_for_pickup,
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: 16),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       SizedBox(
+                    //         height: 16,
+                    //       ),
+                    //       Text(
+                    //         S.of(context).wait_for_pickup,
+                    //         style: Theme.of(context).textTheme.bodyText2,
+                    //       ),
+                    //       SizedBox(
+                    //         height: 8,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
 
                     ///Самовывоз
-                    SizedBox(
-                      height: 128,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: _con.activeOrders.length,
-                        itemBuilder: (context, index) {
-                          var _order = _con.activeOrders.elementAt(index);
-                          return Row(
-                            children: [
-                              index == 0
-                                  ? SizedBox(
-                                      width: 16,
-                                    )
-                                  : SizedBox(),
-                              _order.active
-                                  ? CurrentOrderItemWidget(
-                                      onTap: () => Navigator.of(context)
-                                          .pushNamed('/Tracking',
-                                              arguments:
-                                                  RouteArgument(id: _order.id)),
-                                      pickUpTime: _order.delivery_timestamp,
-                                      date: _order.dateTime,
-                                      // pickupAddress: "ул. Людогоща, 8",
-                                      pickupAddress:
-                                          _order.delivery_address.address,
-                                      deliveryAddress: "",
-                                      status: _order.orderStatus.status,
-                                      ready: _order.orderStatus.status ==
-                                                  S
-                                                      .of(context)
-                                                      .ready_for_pickup ||
-                                              _order.orderStatus.status ==
-                                                  S
-                                                      .of(context)
-                                                      .wait_for_delivery_man
-                                          ? true
-                                          : false,
-                                      delivery: false,
-                                      orderId: _order.id,
-                                      // expanded: index == 0 ? true : false,
-                                      // order: _order,
-                                      // onCanceled: (e) {
-                                      //   _con.doCancelOrder(_order);
-                                      // },
-                                    )
-                                  : SizedBox(),
-                              index == _con.activeOrders.length - 1
-                                  ? SizedBox(
-                                      width: 16,
-                                    )
-                                  : SizedBox(),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(width: 8);
-                        },
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 128,
+                    //   child: ListView.separated(
+                    //     scrollDirection: Axis.horizontal,
+                    //     shrinkWrap: true,
+                    //     primary: false,
+                    //     itemCount: _con.activeOrders.length,
+                    //     itemBuilder: (context, index) {
+                    //       var _order = _con.activeOrders.elementAt(index);
+                    //       return Row(
+                    //         children: [
+                    //           index == 0
+                    //               ? SizedBox(
+                    //                   width: 16,
+                    //                 )
+                    //               : SizedBox(),
+                    //           _order.active
+                    //               ? CurrentOrderItemWidget(
+                    //                   onTap: () => Navigator.of(context)
+                    //                       .pushNamed('/Tracking',
+                    //                           arguments:
+                    //                               RouteArgument(id: _order.id)),
+                    //                   pickUpTime: _order.delivery_timestamp,
+                    //                   date: _order.dateTime,
+                    //                   // pickupAddress: "ул. Людогоща, 8",
+                    //                   pickupAddress:
+                    //                       _order.delivery_address.address,
+                    //                   deliveryAddress: "",
+                    //                   status: _order.orderStatus.status,
+                    //                   ready: _order.orderStatus.status ==
+                    //                               S
+                    //                                   .of(context)
+                    //                                   .ready_for_pickup ||
+                    //                           _order.orderStatus.status ==
+                    //                               S
+                    //                                   .of(context)
+                    //                                   .wait_for_delivery_man
+                    //                       ? true
+                    //                       : false,
+                    //                   delivery: false,
+                    //                   orderId: _order.id,
+                    //                   // expanded: index == 0 ? true : false,
+                    //                   // order: _order,
+                    //                   // onCanceled: (e) {
+                    //                   //   _con.doCancelOrder(_order);
+                    //                   // },
+                    //                 )
+                    //               : SizedBox(),
+                    //           index == _con.activeOrders.length - 1
+                    //               ? SizedBox(
+                    //                   width: 16,
+                    //                 )
+                    //               : SizedBox(),
+                    //         ],
+                    //       );
+                    //     },
+                    //     separatorBuilder: (context, index) {
+                    //       return SizedBox(width: 8);
+                    //     },
+                    //   ),
+                    // ),
 
                     ///Выполненные заказы
                     _con.completedOrders.length != 0

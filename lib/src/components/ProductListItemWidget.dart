@@ -355,7 +355,7 @@ class _ProductListItemWidgetState extends StateMVC<ProductListItemWidget> {
             children: [
               Container(
                   width: widget.image_width,
-                  height: widget.image_height,
+                  height: widget.image_height * 1.5,
                   decoration: BoxDecoration(
                       color: primary_50,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -368,7 +368,7 @@ class _ProductListItemWidgetState extends StateMVC<ProductListItemWidget> {
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
                           child: CachedNetworkImage(
-                              height: widget.image_height,
+                              height: widget.image_height * 1.5,
                               width: double.infinity,
                               fit: BoxFit.cover,
                               imageUrl:

@@ -3,25 +3,32 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:markets/src/components/PrimaryButtonWidget.dart';
+import 'package:markets/src/controllers/cart_controller.dart';
 import 'package:markets/src/helpers/colors.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../../generated/l10n.dart';
 import '../helpers/app_config.dart' as config;
+import '../models/cart.dart';
 
 class EmptyCartWidget extends StatefulWidget {
-  EmptyCartWidget({
-    Key key,
-  }) : super(key: key);
+  EmptyCartWidget({this.controller});
+  final CartController controller;
 
   @override
   _EmptyCartWidgetState createState() => _EmptyCartWidgetState();
 }
 
-class _EmptyCartWidgetState extends State<EmptyCartWidget> {
+class _EmptyCartWidgetState extends StateMVC<EmptyCartWidget> {
   bool loading = true;
+  CartController _con;
 
   @override
   void initState() {
+    setState(() {
+      _con = widget.controller;
+    });
+
     Timer(Duration(seconds: 1), () {
       if (mounted) {
         setState(() {
@@ -59,11 +66,21 @@ class _EmptyCartWidgetState extends State<EmptyCartWidget> {
                 // fit: BoxFit.cover,
               ),
               SizedBox(height: 20),
-              Text(
-                S.of(context).dont_have_any_item_in_your_cart,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              // Text(
+              //   (!_con.cartsLoading && _con.carts.isEmpty)
+              //       ? S.of(context).dont_have_any_item_in_your_cart
+              //       : 'Корзина обновляется...',
+              //   textAlign: TextAlign.center,
+              //   style: Theme.of(context).textTheme.subtitle1,
+              // ),
+              _con.cartsLoading
+                  ? Text('Корзина обновляется...',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1)
+                  : Text(S.of(context).dont_have_any_item_in_your_cart,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1),
+
               SizedBox(height: 6),
               Text(
                 S.of(context).here_will_be_your_items,

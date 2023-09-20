@@ -18,6 +18,7 @@ class PrimaryButton extends StatelessWidget {
       this.buttonText,
       this.min_width,
       this.min_height,
+      this.isLoading = false,
       this.enabled = true})
       : super(key: key);
   // final Widget btn_icon;
@@ -34,6 +35,7 @@ class PrimaryButton extends StatelessWidget {
   final double min_width;
   final double min_height;
   final bool enabled;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return buttonText

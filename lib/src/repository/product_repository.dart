@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
+import 'package:markets/src/models/present.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/custom_trace.dart';
@@ -69,6 +70,39 @@ Future<Stream<Product>> getTrendingProducts() async {
   _queryParams['limit'] = '10';
   _queryParams['sort'] = 'last_ordered';
   _queryParams['f[were_ordered]'] = '1';
+  _queryParams['search'] = 'market.address:${activeCity}';
+
+  _queryParams.addAll(filter.toQuery());
+  uri = uri.replace(queryParameters: _queryParams);
+  try {
+    final client = new http.Client();
+    final streamedRest = await client.send(http.Request('get', uri));
+
+    return streamedRest.stream
+        .transform(utf8.decoder)
+        .transform(json.decoder)
+        .map((data) => Helper.getData(data))
+        .expand((data) => (data as List))
+        .map((data) {
+      return Product.fromJSON(data);
+    });
+  } catch (e) {
+    print(CustomTrace(StackTrace.current, message: uri.toString()).toString());
+    return new Stream.value(new Product.fromJSON({}));
+  }
+}
+
+Future<Stream<Product>> getSetsOfProducts() async {
+  Uri uri = Helper.getUri('api/products');
+  Map<String, dynamic> _queryParams = {};
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Filter filter =
+      Filter.fromJSON(json.decode(prefs.getString('filter') ?? '{}'));
+  String activeCity = prefs.getString('activeCity');
+  filter.delivery = false;
+  filter.open = false;
+  _queryParams['limit'] = '10';
+  _queryParams['f[selected]'] = '1';
   _queryParams['search'] = 'market.address:${activeCity}';
 
   _queryParams.addAll(filter.toQuery());
@@ -202,6 +236,40 @@ Future<Stream<Product>> getProduct(String productId) async {
     print(CustomTrace(StackTrace.current, message: e.toString()).toString());
     return new Stream.value(new Product.fromJSON({}));
   }
+}
+
+Future<List<CartPresentModel>> getPresents() async {
+  Uri uri = Helper.getUri('api/presents');
+  List<CartPresentModel> _list = [];
+  try {
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body)['data'];
+      _list =
+          responseData.map((item) => CartPresentModel.fromJSON(item)).toList();
+    }
+  } catch (e) {
+    print(CustomTrace(StackTrace.current, message: uri.toString()).toString());
+  }
+  return _list;
+}
+
+Future<List<Product>> getRelated() async {
+  Uri uri = Helper.getUri('api/related_products');
+  uri = uri.replace(queryParameters: {'include': 'product'});
+  List<Product> _list = [];
+  try {
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body)['data'];
+      for (var item in responseData) {
+        _list.add(Product.fromJSON(item['product']));
+      }
+    }
+  } catch (e) {
+    print(CustomTrace(StackTrace.current, message: uri.toString()).toString());
+  }
+  return _list;
 }
 
 Future<Product> getProductById(String productId) async {
