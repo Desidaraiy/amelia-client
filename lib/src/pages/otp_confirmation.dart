@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +12,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import '../../generated/l10n.dart';
 import '../repository/user_repository.dart';
-import 'package:telephony/telephony.dart';
 
 class OTPConfirmationWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -26,57 +27,28 @@ class OTPConfirmationWidget extends StatefulWidget {
 class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
   String smsSent;
   String phone;
-  List<FocusNode> _focusNodes;
-  List<TextEditingController> _textControllers;
-  Telephony telephony = Telephony.instance;
+  TextEditingController _codeController;
+  FocusNode _codeFocusNode;
   String _autofilledCode = '';
 
   @override
   void initState() {
     super.initState();
-    _focusNodes = List.generate(6, (_) => FocusNode());
-    _textControllers = List.generate(6, (_) => TextEditingController());
+    _codeController = TextEditingController();
+    _codeFocusNode = FocusNode();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     phone = widget.phone;
-    _focusNodes[0].requestFocus();
-    telephony.listenIncomingSms(onNewMessage: codeAutoFill);
+    _codeFocusNode.requestFocus();
   }
 
-  @override
-  void dispose() {
-    _focusNodes.forEach((node) => node.dispose());
-    _textControllers.forEach((controller) => controller.dispose());
-    super.dispose();
-  }
-
-  void codeAutoFill(SmsMessage smsMessage) {
-    setState(() {
-      _autofilledCode =
-          smsMessage.body.replaceAll(new RegExp(r'[^0-9]'), '').substring(0, 6);
-      ;
-    });
-    print('code: $_autofilledCode');
-    if (_autofilledCode.length == 6) {
-      for (int i = 0; i < 6; i++) {
-        _textControllers[i].text = _autofilledCode[i];
-      }
-      _verify(_autofilledCode);
-    }
-  }
-
-  void _handleCodeChanged(int index, String value) {
+  void _handleCodeChanged(String value) {
     if (value.isNotEmpty) {
-      if (index < 5) {
-        _focusNodes[index + 1].requestFocus();
-      } else {
-        _focusNodes[index].unfocus();
-        final code =
-            _textControllers.map((controller) => controller.text).join();
-        _verify(code);
+      if (value.length > 5) {
+        _verify(_codeController.text);
       }
     }
   }
@@ -94,10 +66,8 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
       String errorMessage = '';
       if (e.code == 'invalid-verification-code') {
         errorMessage = 'Неверный код подтверждения';
-        for (int i = 0; i <= 5; i++) {
-          _textControllers[i].text = '';
-        }
-        _focusNodes[0].requestFocus();
+        _codeController.text = '';
+        _codeFocusNode.requestFocus();
       }
       ScaffoldMessenger.of(widget.scaffoldKey?.currentContext)
           .showSnackBar(SnackBar(
@@ -159,44 +129,26 @@ class _OTPConfirmationWidgetState extends StateMVC<OTPConfirmationWidget> {
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: List.generate(
-                            6,
-                            (index) => Expanded(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
                               child: Container(
                                 margin: EdgeInsets.only(right: 8),
                                 child: SmallPropertyInput(
-                                  maxLength: 1,
+                                  maxLength: 6,
                                   onChange: (value) =>
-                                      _handleCodeChanged(index, value),
-                                  focusNode: _focusNodes[index],
-                                  onSaved: (_) => _focusNodes[index].unfocus(),
-                                  controller: _textControllers[index],
+                                      _handleCodeChanged(value),
+                                  focusNode: _codeFocusNode,
+                                  onSaved: (_) => _codeFocusNode.unfocus(),
+                                  controller: _codeController,
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                         SizedBox(
                           height: 8,
                         ),
-                        // PrimaryButton(
-                        //   icon: null,
-                        //   small: false,
-                        //   text: "Подтвердить",
-                        //   onPressed: () {
-                        //     Navigator.of(context)
-                        //         .pushReplacementNamed('/Pages', arguments: 0);
-                        //   },
-                        //   min_width: 176,
-                        //   min_height: 48,
-                        //   left_padding: 0,
-                        //   right_padding: 0,
-                        //   top_padding: 14,
-                        //   bottom_padding: 14,
-                        //   border_radius: 5,
-                        //   buttonText: true,
-                        // )
                       ],
                     ),
                   )

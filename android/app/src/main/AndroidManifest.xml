@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
    <application
         android:label="Амелия"
@@ -59,13 +58,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" /> 
             </intent-filter> 
         </service>
-
-		<receiver android:name="com.shounakmulay.telephony.sms.IncomingSmsReceiver"
-		    android:permission="android.permission.BROADCAST_SMS" android:exported="true">
-		    <intent-filter>
-			<action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-		    </intent-filter>
-		</receiver>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"

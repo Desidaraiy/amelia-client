@@ -59,10 +59,8 @@ class _SmallPropertyInputState extends State<SmallPropertyInput> {
       cursorColor: Theme.of(context).primaryColor,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
-      style: Theme.of(context)
-          .textTheme
-          .subtitle1
-          .merge(TextStyle(fontSize: 16, color: neutral_500)),
+      style: Theme.of(context).textTheme.subtitle1.merge(
+          TextStyle(fontSize: 23, color: neutral_500, letterSpacing: 5.0)),
       decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         filled: true,
