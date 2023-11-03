@@ -48,6 +48,7 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
   List<int> roses = [1, 3, 5, 7, 9, 11, 13, 15];
   int selectedIndex;
   double sum;
+  int quantity = 1;
   _ProductWidgetState() : super(ProductController()) {
     _con = controller;
   }
@@ -102,11 +103,12 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                 }
               },
               handleCart: (p) {
-                if (selectedIndex != null) {
-                  _con.addToCart(p, quantity: roses[selectedIndex]);
-                } else {
-                  _con.addToCart(p);
-                }
+                // if (selectedIndex != null) {
+                //   _con.addToCart(p, quantity: quantity);
+                // } else {
+                //   _con.addToCart(p);
+                // }
+                _con.addToCart(p, quantity: quantity);
               },
             )
           : Container(height: 0),
@@ -593,8 +595,12 @@ class _ProductWidgetState extends StateMVC<ProductWidget> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16),
                                             child: Counter(
-                                              counter: 1,
-                                            ),
+                                                counter: quantity,
+                                                handleCounter: (value) {
+                                                  setState(() {
+                                                    quantity = value;
+                                                  });
+                                                }),
                                           ),
                                   ],
                                 ),
