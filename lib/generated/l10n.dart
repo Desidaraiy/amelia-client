@@ -488,7 +488,7 @@ class S {
   /// `Код отправлен на`
   String get code_sent_to {
     return Intl.message(
-      'Код отправлен на',
+      'Введите последние 4 цифры номера, который позвонит на ',
       name: 'code_sent_to',
       desc: '',
       args: [],

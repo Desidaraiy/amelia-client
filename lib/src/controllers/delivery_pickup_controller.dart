@@ -169,7 +169,7 @@ class DeliveryPickupController extends CartController {
           ),
           body: SafeArea(
             child: WebView(
-              initialUrl: 'https://amelia-app53.fvds.ru/pay/',
+              initialUrl: 'https://ameliamobile.ru/pay/',
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController controller) {
                 setState(() {
