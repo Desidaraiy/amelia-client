@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+// import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,8 @@ Future<void> main() async {
       message:
           "api_base_url: ${GlobalConfiguration().getValue('api_base_url')}"));
   HttpOverrides.global = MyHttpOverrides();
+  // AppMetrica.activate(AppMetricaConfig("e47b974e-4838-4f08-a16c-3100a0cf6160"));
+  // AppMetrica.reportEvent("App started");
   runApp(MyApp());
 }
 
